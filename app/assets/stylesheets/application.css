@@ -11,3 +11,38 @@
  *= require_self
  *= require_tree .
  */
+.container-narrow {
+    margin: 0 auto;
+    max-width: 700px;
+}
+
+.section {
+    margin-top: 30px;
+    border-top: 1px solid lightgrey;
+    padding-top: 30px;
+}
+.banner {
+    background: -webkit-linear-gradient(left, darkgreen, green, darkgreen); /* For Safari */
+    background: -o-linear-gradient(left, darkgreen, green, darkgreen); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(left, darkgreen, green, darkgreen); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(left, darkgreen, green, darkgreen); /* Standard syntax */
+    padding: 60px;
+    margin-bottom: 30px;
+    text-align: center;
+    /*box-shadow: 0px 10px 5px lightgrey;*/
+}
+
+.banner h1 {
+    font-size: 72px;
+    line-height: 1;
+}
+
+.banner p {
+    font-size: 21px;
+    font-weight: 200;
+    line-heigh: 30px;
+}
+
+.footer {
+    margin-top: 30px;
+}
