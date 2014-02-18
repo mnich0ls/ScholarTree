@@ -37,41 +37,30 @@
     <%= javascript_include_tag "application" %>
   </head>
   <body>
-    <div class="banner">
-        <div class="container-narrow">
-            <h1>ScholarTree</h1>
-            <p>Something about the topic. More about the other topic fill this with a lot of text.
-                            Let's see how far it spans. Need to write some more here so I can see how the paragraphs look.</p>
-        </div>
-    </div>
-
-    <div class="container-narrow">
-      <div class="row-fluid">
-          <div class="section">
-            <div class="span12">
-                <h4>Topic</h4>
-                <p>Something about the topic. More about the other topic fill this with a lot of text.
-                    Let's see how far it spans. Need to write some more here so I can see how the paragraphs look.</p>
-                <p>Something about the topic. More about the other topic fill this with a lot of text.
-                   Let's see how far it spans. Need to write some more here so I can see how the paragraphs look.</p>
+      <div class="navbar navbar-fixed-top navbar-inverse">
+        <div class="navbar-inner">
+            <div class="nav-container">
+                <a class="brand" href="#">ScholarTree</a>
+                <ul class="nav">
+                  <% if user_signed_in? %>
+                    <li><%= link_to 'Edit profile', edit_user_registration_path, :class => 'navbar-link' %></li>
+                    <li><%= link_to "Logout", destroy_user_session_path, method: :delete, :class => 'navbar-link'  %></li>
+                  <% else %>
+                    <li><%= link_to "Sign up", new_user_registration_path, :class => 'navbar-link'  %></li>
+                    <li><%= link_to "Login", new_user_session_path, :class => 'navbar-link'  %></li>
+                  <% end %>
+                </ul><!--nav-->
             </div>
-          </div><!-- section -->
-       </div><!--/row-->
-       <div class="row-fluid">
-                 <div class="section">
-                   <div class="span12">
-                       <h4>Topic</h4>
-                       <p>Something about the topic. More about the other topic fill this with a lot of text.
-                       Let's see how far it spans.  Need a lot more text here to test this out. </p>
-                   </div>
-                 </div><!-- section -->
-              </div><!--/row-->
-
-        <div class="footer" />
-          <footer>
-            <p>&copy; ScholarTree 2014</p>
-          </footer>
-        </div>
-    </div> <!-- /container -->
+        </div><!--navbar-inner-->
+      </div><!-- navbar-fixed-top-->
+    <% if notice %>
+        <p class="alert alert-notice"><%= notice%></p>
+    <% end %>
+    <% if alert %>
+        <p class="alert alert-error"><%= alert %></p>
+    <% end %>
+    <div>
+    <%= yield %>
+    </div>
   </body>
 </html>
