@@ -140,6 +140,7 @@ DEPENDENCIES
   jbuilder (~> 1.2)
   jquery-rails
   less-rails
+  libv8 (= 3.16.14.3)
   mysql
   rails (= 4.0.2)
   sass-rails (~> 4.0.0)

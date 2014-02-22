@@ -6,6 +6,7 @@
 
 # Ignore database config passwords
 /config/database.yml
+/config/environment.rb
 
 # Ignore bundler config.
 /.bundle
