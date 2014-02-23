@@ -48,6 +48,10 @@ header p {
     margin: 0 auto;
 }
 
+textarea {
+    width: 100%;
+}
+
 .footer {
     margin-top: 30px;
 }
