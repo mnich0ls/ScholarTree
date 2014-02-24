@@ -39,28 +39,34 @@
   <body>
       <div class="navbar navbar-fixed-top navbar-inverse">
         <div class="navbar-inner">
-            <div class="nav-container">
-                <a class="brand" href="#">ScholarTree</a>
-                <ul class="nav">
-                  <% if user_signed_in? %>
-                    <li><%= link_to 'Edit profile', edit_user_registration_path, :class => 'navbar-link' %></li>
-                    <li><%= link_to "Logout", destroy_user_session_path, method: :delete, :class => 'navbar-link'  %></li>
-                  <% else %>
-                    <li><%= link_to "Sign up", new_user_registration_path, :class => 'navbar-link'  %></li>
-                    <li><%= link_to "Login", new_user_session_path, :class => 'navbar-link'  %></li>
-                  <% end %>
-                </ul><!--nav-->
-            </div>
+            <a class="brand" href="#">ScholarTree</a>
+            <ul class="nav">
+              <% if user_signed_in? %>
+                <li><%= link_to 'Edit profile', edit_user_registration_path, :class => 'navbar-link' %></li>
+                <li><%= link_to "Logout", destroy_user_session_path, method: :delete, :class => 'navbar-link'  %></li>
+              <% else %>
+                <li><%= link_to "Sign up", new_user_registration_path, :class => 'navbar-link'  %></li>
+                <li><%= link_to "Login", new_user_session_path, :class => 'navbar-link'  %></li>
+              <% end %>
+            </ul><!--nav-->
         </div><!--navbar-inner-->
       </div><!-- navbar-fixed-top-->
+      <div class="header">
+
+      </div>
     <% if notice %>
         <p class="alert alert-notice"><%= notice%></p>
     <% end %>
     <% if alert %>
         <p class="alert alert-error"><%= alert %></p>
     <% end %>
-    <div>
+    <div class="container-fluid content-container">
     <%= yield %>
+    </div>
+    <div class="footer" />
+    <footer>
+      <p>&copy; ScholarTree 2014</p>
+    </footer>
     </div>
   </body>
 </html>
