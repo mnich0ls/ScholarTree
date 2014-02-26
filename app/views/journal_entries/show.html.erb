@@ -1,0 +1,16 @@
+<div class="page-header">
+  <div class="entry-nav">
+    <% if @previous_journal_entry %>
+        <%= link_to 'Previous', journal_entry_path(@previous_journal_entry) %>
+    <% end %>
+    <span>|</span>
+    <% if @next_journal_entry %>
+        <%= link_to 'Next', journal_entry_path(@next_journal_entry) %>
+    <% end %>
+  </div>
+  <h2><%= @journal_entry.description %></h2>
+</div>
+
+<p style="white-space: pre-wrap;"><%= @journal_entry.entry %></p>
+<div class="page-header"></div>
+<%= link_to 'Update Entry', edit_journal_entry_path(@journal_entry), {:class => "btn"} %>
