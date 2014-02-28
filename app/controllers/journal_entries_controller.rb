@@ -1,6 +1,10 @@
+require 'json'
+require 'date'
+
 class JournalEntriesController < JournalController
   def index
     @user = current_user
+    @journal = Journal.where('user' => current_user)[0]
   end
 
   def new
@@ -39,5 +43,33 @@ class JournalEntriesController < JournalController
     @journal_entry = JournalEntry.find(params[:id])
     @journal_entry.update(params.require(:journal_entry).permit(:description, :entry, :journal_id))
     redirect_to journal_entry_url(@journal_entry)
+  end
+
+  def calendar_events_json
+
+    startDate = DateTime.strptime(params[:start], '%s')
+    endDate   = DateTime.strptime(params[:end], '%s')
+
+    entries = JournalEntry.joins(:journal).where('journals.user_id' => current_user)
+      .where('journal_entries.created_at >= ? AND journal_entries.created_at <= ?', startDate, endDate)
+
+    events = []
+    entries.each do |entry|
+      snippet = entry.entry[0..200]
+      if snippet.length != entry.entry.length
+        snippet += '...'
+      end
+        events.push(
+            {
+                "start" => entry.created_at,
+                "title" => entry.description,
+                "url"   => journal_entry_url(entry),
+                "backgroundColor" => 'green',
+                "snippet" => snippet
+            }
+        )
+    end
+
+    render text: (JSON.generate(events))
   end
 end

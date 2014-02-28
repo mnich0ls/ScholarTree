@@ -9,6 +9,9 @@ ScholarTree::Application.routes.draw do
 
   resources :journal_entries
 
+  post 'journal_entries_calendar/events' => 'journal_entries#calendar_events_json'
+  get 'journal_entries_calendar/events' => 'journal_entries#calendar_events_json'
+
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 
