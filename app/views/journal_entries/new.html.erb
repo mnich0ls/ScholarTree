@@ -1,25 +1,3 @@
-<%= content_for :head do %>
-    <script type="text/javascript">
-        $(document).ready(function() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function(position){
-                    // should use a spinner or some indicator to show that location is being determined.
-                    var lat = $('<input>')
-                            .attr("type", "hidden")
-                            .attr("name", "journal_entry[latitude]")
-                            .val(position.coords.latitude);
-                    var lon = $('<input>')
-                            .attr("type", "hidden")
-                            .attr("name", "journal_entry[longitude]")
-                            .val(position.coords.longitude);
-                    $('.journal_entry_form').append($(lon));
-                    $('.journal_entry_form').append($(lat));
-                });
-            }
-        });
-    </script>
-<% end %>
-
 <%= form_for @journal_entry, url: {action: 'create'}, html: {class:'journal_entry_form'} do |f| %>
     <fieldset>
       <legend>New Journal Entry</legend>
@@ -38,6 +16,10 @@
       </div>
 
       <div class="control-group">
+        <span><label style="display: inline-block;">Location </label><span class="spinner"> <i class="icon-spin icon-refresh"></i></span></span>
+      </div>
+
+      <div class="control-group">
         <%= f.label :entry, class: 'control-label' %>
         <div class="controls">
           <%= f.text_area :entry, :style => 'width: 100%; height: 400px;' %>
@@ -49,3 +31,23 @@
       </div>
     </fieldset>
 <% end %>
+<script type="text/javascript">
+    $(document).on('page:change', function() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position){
+                console.log(position.coords)
+                var lat = $('<input>')
+                        .attr("type", "hidden")
+                        .attr("name", "journal_entry[latitude]")
+                        .val(position.coords.latitude);
+                var lon = $('<input>')
+                        .attr("type", "hidden")
+                        .attr("name", "journal_entry[longitude]")
+                        .val(position.coords.longitude);
+                $('.journal_entry_form').append($(lon));
+                $('.journal_entry_form').append($(lat));
+                $('.icon-spin').removeClass('icon-spin icon-refresh').attr('class', 'icon-ok');
+            });
+        }
+    });
+</script>
