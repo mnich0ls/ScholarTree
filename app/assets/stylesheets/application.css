@@ -16,6 +16,10 @@ body {
     padding-top: 40px;
 }
 
+.journal-calendar {
+    min-width: 500px;
+}
+
 header {
     z-index: -1;
     display: block;
