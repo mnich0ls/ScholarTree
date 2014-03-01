@@ -1,41 +1,46 @@
-<h4><%= @journal.name %> Entries</h4>
-<div id="calendar"></div>
 <%= content_for :head do %>
     <script type="text/javascript">
-      $(document).ready(function() {
-          $('#calendar').fullCalendar({
-              header: {
-                  left: 'prev,next, today',
-                  center: 'title',
-                  right:  'month,basicWeek,basicDay'
-              },
-              events: {
-                  url: '/journal_entries_calendar/events',
-                  type: 'post',
-                  color: 'green',
-                  backgroundColor: 'green'
-              },
-              eventRender: function(event, element) {
-                  var left = $(element).position().left;
-                  var top = $(element).position().right;
-                  var height = $(window).height();
-                  var width = $(window).width();
-                  var placement = 'right'
-                  if (left/width > .5) {
-                      placement = 'left'
-                  }
-                  element.popover({
-                      title: event.title,
-                      container: 'body',
-                      trigger: 'hover',
-                      content: event.snippet,
-                      placement: placement
+        var journalEntriesPageReady = function(){
+            $('#calendar').fullCalendar({
+                header: {
+                    left: 'prev,next, today',
+                    center: 'title',
+                    right:  'month,basicWeek,basicDay'
+                },
+                events: {
+                    url: '/journal_entries_calendar/events',
+                    type: 'post',
+                    color: 'green',
+                    backgroundColor: 'green'
+                },
+                eventAfterRender: function(event, element) {
+                    var eventLeft = $(element).position().left;
+                    var eventWidth = $(element).width();
+                    eventLeft = eventLeft + (eventWidth/2);
+                    var windowWidth = $(window).width();
+                    var placement = 'right'
+                    var test = event.title + " " + windowWidth + " " + eventLeft + ' ' + (eventLeft/windowWidth);
+                    if (eventLeft/windowWidth > .5) {
+                        placement = 'left'
+                    }
+                    element.popover({
+                        title: event.title,
+                        container: 'body',
+                        trigger: 'hover',
+                        content: event.snippet,
+                        placement: placement
 
-                  })
-              }
-          });
-      });
+                    })
+                }
+            });
+        };
 
-      /** close popovers when clicking outside of popover */
+        // rails caches javascript in the browser. We need to set a listener to
+        // call the calendar initialization again.
+        $(document).on('page:change', journalEntriesPageReady);
+
+        /** close popovers when clicking outside of popover */
     </script>
 <% end %>
+<h4 class="text-center"><%= @journal.name %> Entries</h4>
+<div id="calendar"></div>

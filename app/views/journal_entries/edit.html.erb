@@ -17,7 +17,8 @@
       </div>
 
       <div class="form-actions">
-        <%= f.submit %>
+        <%= f.submit 'Save', :class => 'btn btn-success' %>
+        <%= link_to 'Cancel', journal_entry_path(@journal_entry.id), :class => 'btn'%>
       </div>
     </fieldset>
 <% end %>

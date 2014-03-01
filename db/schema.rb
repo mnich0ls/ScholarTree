@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140222222823) do
+ActiveRecord::Schema.define(version: 20140301044852) do
 
   create_table "journal_entries", force: true do |t|
     t.text     "entry"
@@ -19,6 +19,8 @@ ActiveRecord::Schema.define(version: 20140222222823) do
     t.integer  "journal_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.decimal  "latitude",    precision: 10, scale: 6
+    t.decimal  "longitude",   precision: 10, scale: 6
   end
 
   create_table "journals", force: true do |t|

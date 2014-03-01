@@ -1,3 +1,3 @@
 class JournalEntry < ActiveRecord::Base
-    belongs_to :journal
+  belongs_to :journal
 end
