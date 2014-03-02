@@ -37,10 +37,10 @@ class JournalEntriesController < JournalController
   end
 
   def update
+    @journal_entry = JournalEntry.find(params[:id])
     if @journal_entry.journal.user != current_user
       raise "error"
     end
-    @journal_entry = JournalEntry.find(params[:id])
     @journal_entry.update(params.require(:journal_entry).permit(:description, :entry, :journal_id))
     redirect_to journal_entry_url(@journal_entry)
   end
