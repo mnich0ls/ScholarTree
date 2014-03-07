@@ -1,7 +1,7 @@
 require 'json'
 require 'date'
 
-class JournalEntriesController < JournalController
+class JournalEntriesController < AuthenticatedController
   def index
     @user = current_user
     @journal = Journal.where('user' => current_user)[0]

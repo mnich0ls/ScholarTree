@@ -36,10 +36,7 @@
         });
     };
 
-    // rails caches javascript in the browser. We need to set a listener to
+    // TurboLinks will cache this page on the client. We need to set a listener to
     // call the calendar initialization again.
-    $(document).ready(journalEntriesPageReady);
     $(document).on('page:change', journalEntriesPageReady);
-
-    /** close popovers when clicking outside of popover */
 </script>

@@ -8,6 +8,7 @@ ScholarTree::Application.routes.draw do
   root 'home#index'
 
   resources :journal_entries
+  resources :goals
 
   post 'journal_entries_calendar/events' => 'journal_entries#calendar_events_json'
   get 'journal_entries_calendar/events' => 'journal_entries#calendar_events_json'

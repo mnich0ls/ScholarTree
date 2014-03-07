@@ -11,7 +11,32 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140301044852) do
+ActiveRecord::Schema.define(version: 20140302221837) do
+
+  create_table "goal_priorities", force: true do |t|
+    t.float    "priority"
+    t.integer  "goal_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "goal_resources", force: true do |t|
+    t.string   "name"
+    t.float    "allocation"
+    t.integer  "goal_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "goals", force: true do |t|
+    t.string   "title"
+    t.date     "timeline_target_completion_date"
+    t.string   "timeline_category"
+    t.date     "completed_on"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "journal_entries", force: true do |t|
     t.text     "entry"
