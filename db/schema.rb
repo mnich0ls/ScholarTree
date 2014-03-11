@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140302221837) do
+ActiveRecord::Schema.define(version: 20140309174749) do
 
   create_table "goal_priorities", force: true do |t|
     t.float    "priority"
@@ -36,6 +36,7 @@ ActiveRecord::Schema.define(version: 20140302221837) do
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "belief_statement"
   end
 
   create_table "journal_entries", force: true do |t|

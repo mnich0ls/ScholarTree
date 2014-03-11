@@ -26,6 +26,11 @@ class GoalsController < AuthenticatedController
     if @goal.timeline_category != 'date'
       @goal.timeline_target_completion_date = nil
     end
+    @goal.goal_resources.each do |g|
+      if g.name == 'other'
+        g.name = g.freeform_name
+      end
+    end
     @goal.save
     redirect_to goals_path
   end
@@ -34,6 +39,20 @@ class GoalsController < AuthenticatedController
     @goal = Goal.find(params[:id])
     if @goal.user != current_user
       raise 'Goal not owned by user'
+    end
+
+
+    @goal.goal_resources.each do |r|
+      is_other = true
+      resources.each do |choice|
+        if choice['value'] == r.name
+          is_other = false
+        end
+      end
+      if is_other
+        r.freeform_name = r.name
+        r.name = 'other'
+      end
     end
 
     @goal_timeline_categories = timeline_categories
@@ -48,12 +67,29 @@ class GoalsController < AuthenticatedController
     end
 
     @goal.update(permitted_goal_params)
+
+    if @goal.timeline_category != 'date'
+      @goal.timeline_target_completion_date = nil
+    end
+
+    @goal.goal_resources.each do |g|
+      if g.name == 'other'
+        g.name = g.freeform_name
+        g.save
+      end
+    end
+
+    @goal.save
+
     redirect_to goals_path
   end
+
+
   def permitted_goal_params
     params.require(:goal).permit(:title, :timeline_category, :timeline_target_completion_date,
+                                 :belief_statement,
                                  goal_priorities_attributes: [:id, :priority],
-                                 goal_resources_attributes: [:id, :name, :allocation]
+                                 goal_resources_attributes: [:id, :name, :allocation, :freeform_name]
     )
   end
 
@@ -101,6 +137,14 @@ class GoalsController < AuthenticatedController
         {
             'title' => 'Education',
             'value' => 'education'
+        },
+        {
+            'title' => 'Discipline',
+            'value' => 'discipline'
+        },
+        {
+            'title' => 'Bravery',
+            'value' => 'bravery'
         },
         {
             'title' => 'Other',

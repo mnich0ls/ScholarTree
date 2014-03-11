@@ -8,10 +8,17 @@
           <%= f.text_field :title %>
       </div>
 
+        <div class="control-group">
+          <%= f.label 'Why have you set this goal for yourself?' %>
+          <div class="controls">
+            <%= f.text_area :belief_statement, :style => 'height: 100px;' %>
+          </div>
+        </div>
+
       <div class="control-group">
         <%= f.label 'Timeline', class: 'control-label' %>
         <div class="controls">
-          <%= f.select(:timeline_category, options_for_select(@goal_timeline_categories.collect {|t| [t['title'], t['value']]})) %>
+          <%= f.select(:timeline_category, options_for_select(@goal_timeline_categories.collect {|t| [t['title'], t['value']]}, @goal.timeline_category)) %>
         </div>
       </div>
 
@@ -20,7 +27,7 @@
         <!--<span><label style="display: inline-block;">Location </label><span class="spinner"> <i class="icon-spin icon-refresh"></i></span></span>-->
       <!--</div>-->
 
-    <div id="my-hidden-div" style="display: none;">
+    <div id="goal-timeline-date-selection" <% if @goal.timeline_category != 'date' %> style="display: none;" <% end %>>
       <div class="control-group">
         <%= f.label 'Target Date', class: 'control-label' %>
         <div class="controls">
@@ -35,7 +42,13 @@
           <div class="control-group">
             <%= resource_form.label 'Requires', class: 'control-label' %>
             <div class="controls">
-              <%= resource_form.select(:name, options_for_select(@goal_resources.collect {|t| [t['title'], t['value']]})) %>
+              <%= resource_form.select(:name, options_for_select(@goal_resources.collect {|t| [t['title'], t['value']]}, resource_form.object.name)) %>
+            </div>
+          </div>
+          <div id="goal-resource-freeform-name-input" class="control-group" <% if resource_form.object.freeform_name == nil %> style="display: none;" <% end %>>
+            <%= resource_form.label 'What do you believe this goal requires?' %>
+            <div class="controls">
+              <%= resource_form.text_field :freeform_name %>
             </div>
           </div>
           <div class="control-group">
@@ -81,10 +94,22 @@
   $('#goal_timeline_category').on('change', function(event){
 
      if ('date' == $(event.currentTarget).val()) {
-         $('#my-hidden-div').show('slow');
+         $('#goal-timeline-date-selection').show('slow');
      }
      else {
-         $('#my-hidden-div').hide('slow');
+         $('#goal-timeline-date-selection').hide('slow');
      }
+  });
+
+  // this only works for a single resource.  This should be dynamic
+  // and work with a potential array of resources
+  $('#goal_goal_resources_attributes_0_name').on('change', function(event){
+
+      if ('other' == $(event.currentTarget).val()) {
+          $('#goal-resource-freeform-name-input').show('slow');
+      }
+      else {
+          $('#goal-resource-freeform-name-input').hide('slow');
+      }
   });
 </script>
