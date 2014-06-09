@@ -54,3 +54,6 @@ end
 
 # Authentication
 gem 'devise'
+
+# Templating
+gem 'haml'
