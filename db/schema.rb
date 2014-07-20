@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140609033921) do
+ActiveRecord::Schema.define(version: 20140720205924) do
 
   create_table "goal_priorities", force: true do |t|
     t.float    "priority"
@@ -54,6 +54,19 @@ ActiveRecord::Schema.define(version: 20140609033921) do
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "photos", force: true do |t|
+    t.string   "title"
+    t.text     "description"
+    t.date     "date"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "image_file_name"
+    t.string   "image_content_type"
+    t.integer  "image_file_size"
+    t.datetime "image_updated_at"
   end
 
   create_table "users", force: true do |t|

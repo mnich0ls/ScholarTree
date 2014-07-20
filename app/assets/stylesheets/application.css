@@ -10,6 +10,7 @@
  *
  *= require_self
  *= require_tree .
+ *= require dropzone/dropzone
  */
 body {
     /* prevents navbar from covering content. */
