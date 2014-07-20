@@ -25,3 +25,6 @@ ScholarTree.iml
 
 # Ignore Mac OS X files
 .DS_Store
+
+# Ignore public assests
+/public/*

@@ -1,6 +1,6 @@
 ScholarTree::Application.routes.draw do
   get "home/index"
-  devise_for :users
+  devise_for :users # , :controllers => {:registrations => "my_devise/registrations"}
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

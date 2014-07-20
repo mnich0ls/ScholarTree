@@ -56,4 +56,9 @@ end
 gem 'devise'
 
 # Templating
-gem 'haml'
+gem 'haml-rails'
+
+# Files
+gem 'paperclip'
+
+gem 'protected_attributes'
