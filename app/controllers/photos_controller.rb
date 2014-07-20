@@ -16,7 +16,7 @@ class PhotosController < AuthenticatedController
     end
   end
 
-  def view
+  def show
     @photo = Photo.find(params[:id])
     if @photo.user != current_user
       raise "error"
@@ -24,4 +24,9 @@ class PhotosController < AuthenticatedController
 
     send_file @photo.image.path, disposition: 'inline'
   end
+
+  def test
+    @photo = Photo.find(params[:id]) 
+  end
+
 end
