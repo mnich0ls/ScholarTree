@@ -51,7 +51,6 @@ ActiveRecord::Schema.define(version: 20140609033921) do
 
   create_table "journals", force: true do |t|
     t.string   "name"
-    t.integer  "journal_entries_id"
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"

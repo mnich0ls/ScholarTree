@@ -1,11 +1,14 @@
 source 'https://rubygems.org'
 
+# Dropzone for drag and drop file uploads
+gem 'dropzonejs-rails'
+
 gem 'libv8', '3.16.14.3'
 
 # Twitter Bootstrap
-gem "therubyracer"
-gem "less-rails"
-gem "twitter-bootstrap-rails"
+gem 'therubyracer'
+gem 'less-rails'
+gem 'twitter-bootstrap-rails'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.0.2'
