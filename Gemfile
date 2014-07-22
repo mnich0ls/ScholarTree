@@ -1,5 +1,12 @@
 source 'https://rubygems.org'
 
+gem 'backbone-on-rails'
+
+gem 'underscore-rails'
+
+# Pagination
+gem 'will_paginate'
+
 # Dropzone for drag and drop file uploads
 gem 'dropzonejs-rails'
 

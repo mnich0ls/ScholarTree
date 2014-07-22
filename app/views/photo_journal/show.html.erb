@@ -1,0 +1,71 @@
+<% content_for :head do %>
+  <script type="text/javascript">
+    var currentPage = 1;
+    var intervalId = undefined;
+    
+    function checkScroll() {
+       if(nearBottomOfPage()){
+         console.log('preparing to load more content');
+         currentPage++;
+         $.ajax('/photo_journal/show?page=' + currentPage,
+           {
+             method: 'get',
+             success: function(data, textStatus, requestObject) {
+               $('.entries').append($(data).find('.entries').html());
+               if (typeof $(data).find('.entries').html() == 'undefined' || $(data).find('.entries').html().trim().length == 0) {
+                 clearInterval(intervalId);
+               }
+             }
+           }
+         );
+       }
+    };
+    
+    function nearBottomOfPage(){
+      return scrollDistanceFromBottom() < 50;
+    }
+    
+    function scrollDistanceFromBottom(arg){
+      return pageHeight() - (window.pageYOffset + self.innerHeight);
+    }
+    
+    function pageHeight(){
+      return Math.max(document.body.scrollHeight, document.body.offsetHeight);
+    }
+
+    $('document').ready(function(){
+        intervalId = setInterval(checkScroll, 300);
+        $('.entries').on('click', '.entry-container', function(){console.log('click'); $('#entry-modal').modal();});
+        var temp = new Entry();
+        temp.logTest();
+    });
+  </script>
+<% end %>
+<div class="entries">
+<% for i in 0..((@entries.length)/3)-1 %>
+  <div class="row-fluid entry-row">
+  <% for j in (i*3)..(i*3)+2 %>
+    <div class="span4 entry-container">
+      <div class="entry-title-container">
+      <h5 ><%= @entries[j]['title'] %></h5>
+      </div>
+      <div class="entry-snippet-container"><%= @entries[j]['snippet'] %></div>
+   </div>
+  <% end %>
+  </div>
+<% end %>
+</div>
+
+<div id="entry-modal" class="modal hide fade">
+  <div class="modal-header">
+   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+   <h3>Testing Header</h3>
+  </div>
+  <div class="modal-body">
+    <p>Testing the body</p>
+  </div>
+  <div class="modal-footer">
+    <a href="#" class="btn" data-dismiss="modal">Close</a>
+    <a href="#" class="btn btn-primary" data-dismiss="modal">Edit</a>
+  </div>
+</div>
