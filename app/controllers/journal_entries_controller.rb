@@ -62,25 +62,14 @@ class JournalEntriesController < AuthenticatedController
         events.push(
             {
                 "start" => entry.created_at,
-<<<<<<< HEAD
-                "title" => entry.description,
                 "url"   => journal_entry_url(entry),
                 "backgroundColor" => 'green',
-                "snippet" => snippet
-=======
                 "title" => entry.description.encode('UTF-8', {:invalid => :replace, :undef => :replace, :replace => '?'}),
-                "url"   => journal_entry_url(entry),
-                "backgroundColor" => 'green',
                 "snippet" => snippet.encode('UTF-8', {:invalid => :replace, :undef => :replace, :replace => '?'})
->>>>>>> 327fcd0... Updates journal entries controller to handle UTF-8 conversion issues
             }
         )
     end
 
     render text: (JSON.generate(events))
   end
-<<<<<<< HEAD
 end
-=======
-end
->>>>>>> 327fcd0... Updates journal entries controller to handle UTF-8 conversion issues
