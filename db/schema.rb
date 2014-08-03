@@ -13,6 +13,24 @@
 
 ActiveRecord::Schema.define(version: 20140720205924) do
 
+  create_table "_temp", id: false, force: true do |t|
+    t.datetime "created"
+    t.string   "description"
+    t.text     "entry"
+    t.string   "latitude"
+    t.string   "longitude"
+    t.datetime "updated"
+  end
+
+  create_table "_temp_copy", id: false, force: true do |t|
+    t.datetime "created"
+    t.string   "description"
+    t.text     "entry"
+    t.string   "latitude"
+    t.string   "longitude"
+    t.datetime "updated"
+  end
+
   create_table "goal_priorities", force: true do |t|
     t.float    "priority"
     t.integer  "goal_id"
@@ -59,7 +77,9 @@ ActiveRecord::Schema.define(version: 20140720205924) do
   create_table "photos", force: true do |t|
     t.string   "title"
     t.text     "description"
-    t.date     "date"
+    t.datetime "taken_at"
+    t.decimal  "latitude",           precision: 10, scale: 6
+    t.decimal  "longitude",          precision: 10, scale: 6
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"

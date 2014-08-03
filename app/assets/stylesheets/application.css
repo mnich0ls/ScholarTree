@@ -48,8 +48,12 @@ header p {
     font-weight: 200;
     line-heigh: 30px;
 }
-.content-container {
+.fixed-width-content-container {
     max-width: 700px;
+    margin: 0 auto;
+}
+
+.full-screen-content-container {
     margin: 0 auto;
 }
 

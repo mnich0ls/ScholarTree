@@ -3,7 +3,9 @@ class CreatePhotos < ActiveRecord::Migration
     create_table :photos do |t|
       t.string :title
       t.text :description
-      t.date :date
+      t.datetime :taken_at
+      t.decimal :latitude, :precision => 10, :scale => 6
+      t.decimal :longitude, :precision => 10, :scale => 6
       t.belongs_to :user
 
       t.timestamps

@@ -5,6 +5,7 @@ class JournalEntriesController < AuthenticatedController
   def index
     @user = current_user
     @journal = Journal.where('user' => current_user)[0]
+    render layout: 'full_screen'
   end
 
   def new

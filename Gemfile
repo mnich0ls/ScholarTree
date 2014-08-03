@@ -1,5 +1,8 @@
 source 'https://rubygems.org'
 
+# used to extract dates from jpgs
+gem 'exifr'
+
 gem 'backbone-on-rails'
 
 gem 'underscore-rails'
