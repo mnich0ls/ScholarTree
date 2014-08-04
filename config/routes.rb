@@ -12,6 +12,7 @@ ScholarTree::Application.routes.draw do
 
   post 'journal_entries_calendar/events' => 'journal_entries#calendar_events_json'
   get 'journal_entries_calendar/events' => 'journal_entries#calendar_events_json'
+  get 'journal_entries/:id/json'        => 'journal_entries#entry_json'
 
   get 'photos/add' => 'photos#add'
   get 'photos/show/:id' => 'photos#show'

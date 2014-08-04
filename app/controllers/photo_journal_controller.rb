@@ -16,6 +16,7 @@ class PhotoJournalController < AuthenticatedController
     @entries = []
     entries.each do |e|
       @entries.push(
+          'id'      => e.id,
           'title'   => e.description,
           'snippet' => e.snippet.encode('UTF-8', {:invalid => :replace, :undef => :replace, :replace => '?'}),
           'date'    => e.created_at.to_time.to_i
@@ -30,6 +31,7 @@ class PhotoJournalController < AuthenticatedController
     @photos = []
     photos.each do |p|
       @photos.push(
+          'id'    => p.id,
           'url'   => p.medium_url,
           'date'  => p.taken_at.to_i
       )

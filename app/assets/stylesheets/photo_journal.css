@@ -4,7 +4,7 @@
 .entry-container {
     margin-bottom: 10px;
 }
-.entry-container:hover {
+.has-modal-view:hover {
     cursor: pointer;
 }
 .entry-title-container {

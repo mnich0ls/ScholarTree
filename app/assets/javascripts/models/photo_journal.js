@@ -1,10 +1,17 @@
+var JournalEntry = Backbone.Model.extend({
+    urlBase: "/journal_entries",
+    url: function(){
+        return this.urlBase + "/" + this.id + "/json";
+    }
+});
+
 var JournalEntries = Backbone.Collection.extend({
     currentPage: 1,
     currentIndex: 0,
     url: "/photo_journal/entries",
     reachedMaxEntries: false,
     entriesReady: function() {
-        return (this.currentIndex <= this.length - 1) || this.reachedMaxEntries;
+        return (this.currentIndex < this.length) || this.reachedMaxEntries;
     },
     currentEntry: function() {
         return this.at(this.currentIndex);
@@ -17,7 +24,7 @@ var Photos = Backbone.Collection.extend({
     url: "/photo_journal/photos",
     reachedMaxPhotos: false,
     photosReady: function() {
-        return (this.currentIndex <= this.length - 1) || this.reachedMaxPhotos;
+        return (this.currentIndex < this.length) || this.reachedMaxPhotos;
     },
     currentPhoto: function(){
         return this.at(this.currentIndex);
@@ -26,9 +33,19 @@ var Photos = Backbone.Collection.extend({
 
 var PhotoView = Backbone.View.extend({
     tagName: 'div',
-    className: 'photo-container span2',
+    className: 'photo-container span2 has-modal-view',
+    events: {
+        'click': "_handleClick"
+    },
     initialize: function(){
         this.template = _.template($('#photo-template').html());
+    },
+    _handleClick: function(){
+        var $img = $('<img>');
+        $img.attr('src', this.model.get('url'));
+        $('#journal-item-modal .modal-header h3').text("Photo");
+        $('#journal-item-modal .modal-body p').html($img);
+        $('#journal-item-modal').modal('toggle');
     },
     render: function() {
         this.$el.html(this.template(this.model.toJSON()));
@@ -37,9 +54,24 @@ var PhotoView = Backbone.View.extend({
 
 var JournalEntryView = Backbone.View.extend({
     tagName: 'div',
-    className: 'entry-container span2',
+    className: 'entry-container span2 has-modal-view',
+    events: {
+        'click': "_handleClick"
+    },
     initialize: function(){
         this.template = _.template($('#entry-template').html());
+        _.bindAll(this, '_entryFetchSuccess');
+    },
+    _handleClick: function(){
+        var entry = new JournalEntry({id: this.model.get('id')});
+        entry.fetch({
+            success: this._entryFetchSuccess
+        });
+    },
+    _entryFetchSuccess: function(entry){
+        $('#journal-item-modal .modal-header h3').text(entry.get('title'));
+        $('#journal-item-modal .modal-body p').text(entry.get('entry'));
+        $('#journal-item-modal').modal('toggle');
     },
     render: function(){
         this.$el.html(this.template(this.model.toJSON()));
@@ -64,19 +96,18 @@ var JournalContainer = Backbone.View.extend({
     initialize: function() {
         console.log("journal container: initializing");
         this.model = new JournalContainerDataSource();
-        this.rowTempalte = _.template($('#entry-row-template').html());
-        // insert empty row
-        //this.$el.append(this.rowTempalte({}));
-
         console.log("journal container: initialized");
-        _.bindAll(this, '_entriesFetched', '_photosFetched');
+        _.bindAll(this, '_entriesFetched', '_photosFetched', '_destroyed');
+        // listen to page change fired by turbo links
+        // this is our chance to free up memory and remove event listeners
+        $(document).on("page:change", this._destroyed);
     },
     render: function() {
         this.fetchPage();
     },
     fetchPage: function(){
-        if (this.model.entries.currentIndex >= this.model.entries.length) {
-            console.log("fetching more entries");
+        if (this.model.entries.currentIndex >= this.model.entries.length && !this.model.entries.reachedMaxEntries) {
+            console.log("fetching more entries. page: " + this.model.entries.currentPage);
             this.model.entries.currentIndex = 0;
             this.model.entries.fetch({
                 data: {page: this.model.entries.currentPage},
@@ -85,8 +116,8 @@ var JournalContainer = Backbone.View.extend({
             this.model.entries.currentPage++;
         }
 
-        if (this.model.photos.currentIndex >= this.model.photos.length) {
-            console.log("fetching more photos");
+        if (this.model.photos.currentIndex >= this.model.photos.length && !this.model.photos.reachedMaxPhotos) {
+            console.log("fetching more photos. page: " + this.model.photos.currentPage);
             this.model.photos.currentIndex = 0;
             this.model.photos.fetch({
                 data: {page: this.model.photos.currentPage},
@@ -153,7 +184,7 @@ var JournalContainer = Backbone.View.extend({
     _appendEntry: function(entry) {
         var entryView = new JournalEntryView({model: entry});
         entryView.render();
-        this._getCurrentRow().append(entryView.el);
+        this.$el.append(entryView.el);
 
         // advance the current JournalEntriesCollection index
         this.model.entries.currentIndex++;
@@ -161,20 +192,16 @@ var JournalContainer = Backbone.View.extend({
     _appendPhoto: function(photo){
         var photoView = new PhotoView({model: photo});
         photoView.render();
-        this._getCurrentRow().append(photoView.el);
+        this.$el.append(photoView.el);
 
         // advance the current index
         this.model.photos.currentIndex++;
     },
-    _getCurrentRow: function(){
-        // get the last row
-//        var $row = this.$('.entry-row').last();
-//        if ($row.children().length == this.entriesPerRow) {
-//            // if the row is full, create new row
-//            $row = $(this.rowTempalte({}));
-//            this.$el.append($row);
-//        }
-//        return $row;
-        return this.$el
+    _destroyed: function() {
+        if (this.scrollPollId != undefined) {
+            console.log("removing scroll poll interval");
+            clearInterval(this.scrollPollId);
+            $(document).off("page:change", this._destroyed);
+        }
     }
 });

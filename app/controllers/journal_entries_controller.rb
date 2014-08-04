@@ -71,6 +71,20 @@ class JournalEntriesController < AuthenticatedController
         )
     end
 
-    render text: (JSON.generate(events))
+    render json: (JSON.generate(events))
+  end
+
+  def entry_json
+    journal_entry = JournalEntry.find(params[:id])
+    if journal_entry.journal.user != current_user
+      logger.info("entry not owned by user")
+      raise "error"
+    end
+    @journal_entry = {
+        'id'  => journal_entry.id,
+        'title' => journal_entry.description,
+        'entry' => journal_entry.entry
+    }
+    render json: (JSON.generate(@journal_entry))
   end
 end
