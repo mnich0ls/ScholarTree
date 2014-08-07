@@ -37,6 +37,11 @@
               <li><%= link_to 'Login', new_user_session_path, :class => 'navbar-link'  %></li>
           <% end %>
         </ul><!--nav-->
+          <ul class="nav pull-right">
+              <form class="navbar-search" method="POST">
+                  <input id="search-query" name="search-query" class="search-query" type="text" placeholder="Search">
+              </form>
+          </ul>
       </div>
     </div>
   </div><!--navbar-inner-->

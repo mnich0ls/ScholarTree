@@ -20,3 +20,17 @@
 //= require_tree ./models
 //= require_tree .
 //= require dropzone
+
+$(function(){
+    console.log("App loaded");
+    window.applicationContext = _.clone(Backbone.Events);
+    console.log("Application context initialized");
+    $(document).on('submit', '.navbar-search',  function(event){
+        event.preventDefault();
+        var searchQuery = $(event.target).find('#search-query').val();
+        console.log("Triggering search event with: " + searchQuery)
+        window.applicationContext.trigger('search', {
+            searchQuery: searchQuery
+        });
+    });
+});

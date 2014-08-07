@@ -1,5 +1,8 @@
 source 'https://rubygems.org'
 
+# natural language date parser
+gem 'chronic'
+
 # used to extract dates from jpgs
 gem 'exifr'
 

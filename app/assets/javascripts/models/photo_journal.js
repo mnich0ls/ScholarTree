@@ -84,23 +84,28 @@ var JournalContainerDataSource = Backbone.Model.extend({
     initialize: function(){
         this.entries = new JournalEntries();
         this.photos = new Photos();
+    },
+    reset: function(){
+        this.entries = new JournalEntries();
+        this.photos = new Photos();
     }
 });
 
 var JournalContainer = Backbone.View.extend({
     el: '#journal-container',
     class: 'row',
-    entriesPerRow: 3,
     scrollPollId: null,
     initialFetch: true,
+    searchQuery: null,
     initialize: function() {
         console.log("journal container: initializing");
         this.model = new JournalContainerDataSource();
         console.log("journal container: initialized");
-        _.bindAll(this, '_entriesFetched', '_photosFetched', '_destroyed');
+        _.bindAll(this, '_entriesFetched', '_photosFetched', '_destroyed', '_search');
         // listen to page change fired by turbo links
         // this is our chance to free up memory and remove event listeners
         $(document).on("page:change", this._destroyed);
+        window.applicationContext.on('search', this._search);
     },
     render: function() {
         this.fetchPage();
@@ -109,8 +114,13 @@ var JournalContainer = Backbone.View.extend({
         if (this.model.entries.currentIndex >= this.model.entries.length && !this.model.entries.reachedMaxEntries) {
             console.log("fetching more entries. page: " + this.model.entries.currentPage);
             this.model.entries.currentIndex = 0;
+            var data = {};
+            data['page'] = this.model.entries.currentPage;
+            if (this.searchQuery != null) {
+                data['search-query'] = this.searchQuery;
+            }
             this.model.entries.fetch({
-                data: {page: this.model.entries.currentPage},
+                data: data,
                 success: this._entriesFetched
             });
             this.model.entries.currentPage++;
@@ -119,8 +129,13 @@ var JournalContainer = Backbone.View.extend({
         if (this.model.photos.currentIndex >= this.model.photos.length && !this.model.photos.reachedMaxPhotos) {
             console.log("fetching more photos. page: " + this.model.photos.currentPage);
             this.model.photos.currentIndex = 0;
+            var data = {};
+            data['page'] = this.model.photos.currentPage;
+            if (this.searchQuery != null) {
+                data['search-query'] = this.searchQuery;
+            }
             this.model.photos.fetch({
-                data: {page: this.model.photos.currentPage},
+                data: data,
                 success: this._photosFetched
             });
             this.model.photos.currentPage++;
@@ -197,10 +212,25 @@ var JournalContainer = Backbone.View.extend({
         // advance the current index
         this.model.photos.currentIndex++;
     },
+    _search: function(data){
+        var searchQuery = data.searchQuery;
+        console.log("Photo Journal searching with query: " + searchQuery);
+        this.searchQuery = searchQuery;
+        this._reset();
+    },
+    _reset: function(){
+        this.model.reset();
+        clearInterval(this.scrollPollId);
+        this.initialFetch = true;
+        this.$el.html('');
+        this.render();
+    },
     _destroyed: function() {
         if (this.scrollPollId != undefined) {
-            console.log("removing scroll poll interval");
             clearInterval(this.scrollPollId);
+            console.log("Photo Journal removed scroll poll interval");
+            window.applicationContext.off('search', this._search);
+            console.log("Photo Journal no longer listening to search events");
             $(document).off("page:change", this._destroyed);
         }
     }

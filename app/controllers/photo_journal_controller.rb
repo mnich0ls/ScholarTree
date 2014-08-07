@@ -1,18 +1,21 @@
+require 'chronic'
+
 class PhotoJournalController < AuthenticatedController
   def show
-    entries = JournalEntry.paginate(:page => params[:page], :per_page => 3)
-    @entries = []
-    entries.each do |entry|
-      @entries.push(
-        'title' => entry.description,
-        'snippet' => entry.snippet.encode('UTF-8', {:invalid => :replace, :undef => :replace, :replace => '?'})
-      )
-    end
     render layout: 'full_screen'
   end
 
   def entries
-    entries = JournalEntry.paginate(:page => params[:page], :per_page => 24).order("created_at")
+    search_query  = params['search-query']
+    page          = params[:page]
+    per_page      = 24
+    date = Chronic.parse(search_query)
+    if date != nil
+      logger.info('Filter entries with: ' + search_query)
+      entries = JournalEntry.where('created_at >= :date', date: date).paginate(:page => page, :per_page => per_page).order('created_at')
+    else
+      entries = JournalEntry.paginate(:page => page, :per_page => per_page).order('created_at')
+    end
     @entries = []
     entries.each do |e|
       @entries.push(
@@ -27,7 +30,15 @@ class PhotoJournalController < AuthenticatedController
   end
 
   def photos
-    photos = Photo.paginate(:page => params[:page], :per_page => 24).order("created_at")
+    search_query  = params['search-query']
+    page          = params[:page]
+    per_page      = 24
+    date = Chronic.parse(search_query)
+    if date != nil
+      photos = Photo.where('taken_at >= :date', date: date).paginate(:page => params[:page], :per_page => 24).order('taken_at')
+    else
+      photos = Photo.paginate(:page => page, :per_page => per_page).order('taken_at')
+    end
     @photos = []
     photos.each do |p|
       @photos.push(

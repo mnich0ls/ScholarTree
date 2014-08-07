@@ -14,10 +14,11 @@
 <script type="text/javascript">
     $('#journal-container').ready(function(){
         window.journalContainer = new JournalContainer();
+        window.journalContainer.searchQuery = "April 2013";
         window.journalContainer.render();
     });
 </script>
-<div id="journal-container"></div>
+<div id="journal-container" class="search-context" search-url="/photo_journal/show"></div>
 
 <div id="journal-item-modal" class="modal hide fade">
   <div class="modal-header">
