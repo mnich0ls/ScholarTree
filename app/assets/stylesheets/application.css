@@ -71,3 +71,13 @@ textarea {
         line-height: 1;
     }
 }
+
+article p {
+    font-size: 12px;
+    line-height: 18px;
+    margin: 0 0 -20px;
+}
+
+.journal-entry-header {
+    border-bottom: 1px solid #eeeeee;
+}

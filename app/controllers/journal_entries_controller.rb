@@ -28,6 +28,17 @@ class JournalEntriesController < AuthenticatedController
       .where("journal_entries.created_at > ?", @journal_entry.created_at).order(created_at: :asc)[0]
     @previous_journal_entry = JournalEntry.joins(:journal).where('journals.user_id' => current_user)
       .where("journal_entries.created_at < ?", @journal_entry.created_at).order(created_at: :desc)[0]
+    @paragraphs = @journal_entry.entry.split("\r")
+    logger.info(@paragraphs)
+    new = []
+    @paragraphs.each do |p|
+      stripped = p.gsub(/[\n\r]/,'')
+      if !stripped.empty?
+        new.append(stripped.strip())
+      end
+    end
+    @paragraphs = new
+    logger.info(@paragraphs)
   end
 
   def edit

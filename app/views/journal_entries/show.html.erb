@@ -1,18 +1,22 @@
-<div class="page-header">
-  <div class="entry-nav">
+<div class="entry-nav">
     <div class="btn-group">
-      <% if @previous_journal_entry %>
-        <a class="btn" href="<%= journal_entry_path(@previous_journal_entry)%>"><i class="icon-chevron-left"></i></a>
-      <% end %>
+        <% if @previous_journal_entry %>
+            <a class="btn" href="<%= journal_entry_path(@previous_journal_entry)%>"><i class="icon-chevron-left"></i></a>
+        <% end %>
 
-      <% if @next_journal_entry %>
-        <a class="btn" href="<%= journal_entry_path(@next_journal_entry)%>"><i class="icon-chevron-right"></i></a>
-      <% end %>
+        <% if @next_journal_entry %>
+            <a class="btn" href="<%= journal_entry_path(@next_journal_entry)%>"><i class="icon-chevron-right"></i></a>
+        <% end %>
     </div>
-  </div>
-  <h2><%= @journal_entry.description %></h2>
 </div>
-
-<p style="white-space: pre-wrap;"><%= @journal_entry.entry %></p>
-<div class="page-header"></div>
+<article>
+    <div class="journal-entry-header">
+        <h2><%= @journal_entry.description %></h2>
+    </div>
+    <div style="white-space: pre-wrap;">
+        <% @paragraphs.each do |p| %>
+            <p><%= p %></p>
+        <% end %>
+    </div>
+</article>
 <%= link_to 'Update', edit_journal_entry_path(@journal_entry), {:class => "btn"} %>
