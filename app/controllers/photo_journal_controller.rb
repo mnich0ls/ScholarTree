@@ -12,9 +12,16 @@ class PhotoJournalController < AuthenticatedController
     date = Chronic.parse(search_query)
     if date != nil
       logger.info('Filter entries with: ' + search_query)
-      entries = JournalEntry.where('created_at >= :date', date: date).paginate(:page => page, :per_page => per_page).order('created_at')
+      entries = JournalEntry.joins(:journal)
+      .where('journals.user_id' => current_user)
+      .where('journal_entries.created_at >= :date', date: date)
+      .paginate(:page => page, :per_page => per_page)
+      .order('journal_entries.created_at')
     else
-      entries = JournalEntry.paginate(:page => page, :per_page => per_page).order('created_at')
+      entries = JournalEntry.joins(:journal)
+      .where('journals.user_id' => current_user)
+      .paginate(:page => page, :per_page => per_page)
+      .order('journal_entries.created_at')
     end
     @entries = []
     entries.each do |e|
@@ -35,9 +42,14 @@ class PhotoJournalController < AuthenticatedController
     per_page      = 24
     date = Chronic.parse(search_query)
     if date != nil
-      photos = Photo.where('taken_at >= :date', date: date).paginate(:page => params[:page], :per_page => 24).order('taken_at')
+      photos = Photo.where('taken_at >= :date AND user_id = :user_id',
+                           date: date, user_id: current_user)
+      .paginate(:page => params[:page], :per_page => 24)
+      .order('taken_at')
     else
-      photos = Photo.paginate(:page => page, :per_page => per_page).order('taken_at')
+      photos = Photo.where('user_id = :user_id', user_id: current_user)
+      .paginate(:page => page, :per_page => per_page)
+      .order('taken_at')
     end
     @photos = []
     photos.each do |p|
