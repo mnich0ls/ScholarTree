@@ -1,18 +1,23 @@
 source 'https://rubygems.org'
 
-# natural language date parser
+# Natural language date parser
 gem 'chronic'
 
-# used to extract dates from jpgs
+# Used to extract exif data from JPGs
 gem 'exifr'
 
+# JavaScript frameworks
 gem 'backbone-on-rails'
 
+# JavaScript utilities
 gem 'underscore-rails'
 
 # Pagination
 gem 'will_paginate'
 
+#
+# JavaScript Modules
+#
 # Dropzone for drag and drop file uploads
 gem 'dropzonejs-rails'
 
@@ -71,10 +76,14 @@ end
 # Authentication
 gem 'devise'
 
-# Templating
+# Template framework
 gem 'haml-rails'
 
-# Files
+# Files/attachments
 gem 'paperclip'
 
+# Extract dimensions from paperclip images
+gem 'paperclip-meta'
+
+# Easily define which attributes of a model are accessible to a controller
 gem 'protected_attributes'

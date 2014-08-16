@@ -51,12 +51,24 @@ class PhotoJournalController < AuthenticatedController
       .paginate(:page => page, :per_page => per_page)
       .order('taken_at')
     end
+    accessible_styles = {
+        'thumb'     => :thumb,
+        'medium'    => :medium,
+        'large'     => :large,
+        'original'  => :original,
+        nil         => :medium
+
+    }
+    style = accessible_styles[params['size']]
     @photos = []
     photos.each do |p|
       @photos.push(
-          'id'    => p.id,
-          'url'   => p.medium_url,
-          'date'  => p.taken_at.to_i
+          'id'          => p.id,
+          'url'         => p.medium_url,
+          'date'        => p.taken_at.to_i,
+          'width'       => p.image.width(style),
+          'height'      => p.image.height(style),
+          'description' => p.description
       )
     end
 

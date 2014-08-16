@@ -38,6 +38,15 @@ class PhotosController < AuthenticatedController
       raise "error"
     end
 
-    send_file @photo.image.path, disposition: 'inline'
+    accessible_styles = {
+        'thumb'   => :thumb,
+        'medium'  => :medium,
+        'full'    => nil,
+        nil       => :medium # default
+    }
+
+    style = accessible_styles[params[:style]]
+
+    send_file @photo.image.path(style), disposition: 'inline'
   end
 end
