@@ -1,5 +1,8 @@
 source 'https://rubygems.org'
 
+# HTML parser
+gem 'nokogiri'
+
 # Natural language date parser
 gem 'chronic'
 

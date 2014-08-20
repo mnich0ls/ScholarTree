@@ -17,12 +17,17 @@ ScholarTree::Application.routes.draw do
   get 'photos/add' => 'photos#add'
   get 'photos/show/:id' => 'photos#show'
   get 'photos/test/:id' => 'photos#test'
-  post 'photos/create' => 'photos#create'
+  post 'photos/create'  => 'photos#create'
 
-  get 'photo_journal/show' => 'photo_journal#show'
-  post 'photo_journal/show' => 'photo_journal#show'
-  get 'photo_journal/entries' => 'photo_journal#entries'
-  get 'photo_journal/photos'  => 'photo_journal#photos'
+  get   'photo_journal/show'    => 'photo_journal#show'
+  post  'photo_journal/show'    => 'photo_journal#show'
+  get   'photo_journal/entries' => 'photo_journal#entries'
+  get   'photo_journal/photos'  => 'photo_journal#photos'
+
+  get   'media_search/show'        => 'media_search#show'
+  post  'media_search/query'       => 'media_search#query'
+  post  'media_search/add_book'    => 'media_search#add_book'
+  get   'media_search/add_book'    => 'media_search#add_book'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
