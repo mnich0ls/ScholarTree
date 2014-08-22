@@ -10,19 +10,19 @@ class PhotoJournalController < AuthenticatedController
     page          = params[:page]
     per_page      = 24
     date = Chronic.parse(search_query)
-    if date != nil
-      logger.info('Filter entries with: ' + search_query)
-      entries = JournalEntry.joins(:journal)
-      .where('journals.user_id' => current_user)
-      .where('journal_entries.created_at >= :date', date: date)
-      .paginate(:page => page, :per_page => per_page)
-      .order('journal_entries.created_at')
-    else
-      entries = JournalEntry.joins(:journal)
-      .where('journals.user_id' => current_user)
-      .paginate(:page => page, :per_page => per_page)
-      .order('journal_entries.created_at')
+
+    if date == nil
+      date = Date.today - 30
     end
+
+    logger.info(date)
+
+    entries = JournalEntry.joins(:journal)
+    .where('journals.user_id' => current_user)
+    .where('journal_entries.created_at >= :date', date: date)
+    .paginate(:page => page, :per_page => per_page)
+    .order('journal_entries.created_at')
+
     @entries = []
     entries.each do |e|
       @entries.push(
@@ -41,16 +41,16 @@ class PhotoJournalController < AuthenticatedController
     page          = params[:page]
     per_page      = 24
     date = Chronic.parse(search_query)
-    if date != nil
-      photos = Photo.where('taken_at >= :date AND user_id = :user_id',
-                           date: date, user_id: current_user)
-      .paginate(:page => params[:page], :per_page => 24)
-      .order('taken_at')
-    else
-      photos = Photo.where('user_id = :user_id', user_id: current_user)
-      .paginate(:page => page, :per_page => per_page)
-      .order('taken_at')
+
+    if date == nil
+      date = Date.today - 30
     end
+
+    photos = Photo.where('taken_at >= :date AND user_id = :user_id',
+                         date: date, user_id: current_user)
+    .paginate(:page => page, :per_page => per_page)
+    .order('taken_at')
+
     accessible_styles = {
         'thumb'     => :thumb,
         'medium'    => :medium,
