@@ -53,6 +53,7 @@ class PhotoJournalController < AuthenticatedController
     .order('taken_at')
 
     style = params['size']
+    modal_style = params['modal_size']
 
     @photos = []
     photos.each do |p|
@@ -60,9 +61,13 @@ class PhotoJournalController < AuthenticatedController
           'id'          => p.id,
           'type'        => 'photo',
           'url'         => p.image_url_for_style(style),
+          'modalUrl'    => p.image_url_for_style(modal_style),
           'date'        => p.taken_at.to_i,
+          'dateString'  => p.taken_at.strftime("%A %B %d %Y"),
           'width'       => p.image.width(style),
           'height'      => p.image.height(style),
+          'modalWidth'  => p.image.width(modal_style),
+          'modalHeight' => p.image.height(modal_style),
           'description' => p.description
       )
     end
@@ -85,7 +90,10 @@ class PhotoJournalController < AuthenticatedController
     .paginate(:page => page, :per_page => per_page)
     .order('created_at')
 
-    style = params['size']
+    style       = params['size']
+    modal_style = params['modal_size']
+
+    logger.info(modal_style)
 
     @books = []
     books.each do |b|
@@ -93,9 +101,13 @@ class PhotoJournalController < AuthenticatedController
           'id'          => b.id,
           'type'        => 'book',
           'url'         => b.cover_image_url_for_style(style),
+          'modalUrl'    => b.cover_image_url_for_style(modal_style),
           'width'       => b.cover_image.width(style),
           'height'      => b.cover_image.height(style),
+          'modalWidth'  => b.cover_image.width(modal_style),
+          'modalHeight' => b.cover_image.height(modal_style),
           'date'        => b.created_at.to_i,
+          'dateString'  => b.created_at.strftime("%A %B %d %Y"),
           'title'       => b.title,
           'description' => b.description.to_s
       )
