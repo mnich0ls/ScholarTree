@@ -38,19 +38,22 @@
     <%= javascript_include_tag "application" %>
     <%= yield :head %>
 </head>
-<body class="under-navbar">
-<%= render 'shared/nav_bar_2' %>
-<% if notice %>
-    <p class="alert alert-notice"><%= notice%></p>
-<% end %>
-<% if alert %>
-    <p class="alert alert-error"><%= alert %></p>
-<% end %>
-<div class="container-fluid full-screen-content-container">
-    <%= yield %>
-</div>
-<div class="footer" />
-<%= render 'shared/footer' %>
-</div>
+<body>
+    <%= render 'shared/nav_bar_2' %>
+    <%= render 'shared/nav_bar_2_context_nav' %>
+    <div class="under-double-navbar">
+        <% if notice %>
+            <p class="alert alert-notice"><%= notice%></p>
+        <% end %>
+        <% if alert %>
+            <p class="alert alert-error"><%= alert %></p>
+        <% end %>
+        <div class="container-fluid full-screen-content-container">
+            <%= yield %>
+        </div>
+        <div class="footer" />
+        <%= render 'shared/footer' %>
+        </div>
+    </div>
 </body>
 </html>

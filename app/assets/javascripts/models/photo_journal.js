@@ -174,13 +174,14 @@ var JournalContainer = Backbone.View.extend({
     initialize: function() {
         console.log("journal container: initializing");
         this.model = new JournalContainerDataSource();
-        console.log("journal container: initialized");
         _.bindAll(this, '_entriesFetched', '_photosFetched', '_booksFetched',
             '_destroyed', '_search');
         // listen to page change fired by turbo links
         // this is our chance to free up memory and remove event listeners
         $(document).on("page:change", this._destroyed);
-        window.applicationContext.on('search', this._search);
+        window.applicationDelegate.registerEventHandler('context-search', this._search, 'Photo Journal');
+        window.applicationDelegate.trigger('context-switch', { context: "Photo Journal" });
+        console.log("journal container: initialized");
     },
     render: function() {
         this.fetchPage();
@@ -341,8 +342,7 @@ var JournalContainer = Backbone.View.extend({
         if (this.scrollPollId != undefined) {
             clearInterval(this.scrollPollId);
             console.log("Photo Journal removed scroll poll interval");
-            window.applicationContext.off('search', this._search);
-            console.log("Photo Journal no longer listening to search events");
+            window.applicationDelegate.removeEventHandler('context-search', this._search, 'Photo Journal');
             $(document).off("page:change", this._destroyed);
         }
     }

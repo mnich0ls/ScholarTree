@@ -18,6 +18,11 @@
     padding-top: 70px;
 }
 
+.under-double-navbar {
+    /* prevents navbar from covering content. */
+    padding-top: 100px;
+}
+
 .no-padding {
     padding: 0px;
 }
@@ -127,4 +132,29 @@ img {
     display: block;
     height: auto;
     max-width: 100%;
+}
+
+.affix {
+    top: 50px;
+    width:100%;
+}
+
+.context-navbar {
+    margin-top: 50px; /* push below main navbar */
+    width: 100% !important;
+    min-height: 30px !important; /* make smaller. default is 50px */
+    border-radius: 0px !important;
+    position: fixed !important; /* prevent scrolling with page content */
+    z-index: 1000; /* ensure on top of content */
+}
+
+.context-navbar-context-title {
+    max-height: 30px !important;
+    padding: 10px 15px !important;
+    font-size: 15px !important;
+    min-width: 150px;
+}
+
+.page-search-input {
+    max-height: 25px !important;
 }

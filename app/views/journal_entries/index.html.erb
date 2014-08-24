@@ -40,6 +40,7 @@
         else {
             $('#calendar').fullCalendar('refetchEvents');
         }
+        window.applicationDelegate.trigger('context-switch', { context: 'Journal Entries'});
     };
     $('#calendar').ready(function(){journalEntriesPageReady()});
 </script>
