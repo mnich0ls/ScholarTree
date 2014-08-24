@@ -5,6 +5,32 @@ var JournalEntry = Backbone.Model.extend({
     }
 });
 
+var JournalEntryView = Backbone.View.extend({
+    tagName: 'div',
+    className: 'entry-container col-xs-12 col-sm-3 has-modal-view',
+    events: {
+        'click': "_handleClick"
+    },
+    initialize: function(){
+        this.template = _.template($('#entry-template').html());
+        _.bindAll(this, '_entryFetchSuccess');
+    },
+    _handleClick: function(){
+        var entry = new JournalEntry({id: this.model.get('id')});
+        entry.fetch({
+            success: this._entryFetchSuccess
+        });
+    },
+    _entryFetchSuccess: function(entry){
+        $('#journal-item-modal .modal-header h3').text(entry.get('title'));
+        $('#journal-item-modal .modal-body p').text(entry.get('entry'));
+        $('#journal-item-modal').modal('toggle');
+    },
+    render: function(){
+        this.$el.html(this.template(this.model.toJSON()));
+    }
+});
+
 var JournalEntries = Backbone.Collection.extend({
     currentPage: 1,
     currentIndex: 0,
@@ -33,7 +59,7 @@ var Photos = Backbone.Collection.extend({
 
 var PhotoView = Backbone.View.extend({
     tagName: 'div',
-    className: 'photo-container span2 has-modal-view',
+    className: 'photo-container col-xs-3 col-md-2 has-modal-view',
     events: {
         'click': "_handleClick"
     },
@@ -52,28 +78,26 @@ var PhotoView = Backbone.View.extend({
     }
 });
 
-var JournalEntryView = Backbone.View.extend({
+var Books = Backbone.Collection.extend({
+    currentPage: 1,
+    currentIndex: 0,
+    url: "/photo_journal/books",
+    reachedMaxBooks: false,
+    booksReady: function() {
+        return (this.currentIndex < this.length) || this.reachedMaxBooks;
+    },
+    currentBook: function() {
+        return this.at(this.currentIndex);
+    }
+});
+
+var BookView = Backbone.View.extend({
     tagName: 'div',
-    className: 'entry-container span2 has-modal-view',
-    events: {
-        'click': "_handleClick"
+    className: 'book-container col-xs-3 col-md-2 has-modal-view',
+    initialize: function() {
+        this.template = _.template($('#book-template').html());
     },
-    initialize: function(){
-        this.template = _.template($('#entry-template').html());
-        _.bindAll(this, '_entryFetchSuccess');
-    },
-    _handleClick: function(){
-        var entry = new JournalEntry({id: this.model.get('id')});
-        entry.fetch({
-            success: this._entryFetchSuccess
-        });
-    },
-    _entryFetchSuccess: function(entry){
-        $('#journal-item-modal .modal-header h3').text(entry.get('title'));
-        $('#journal-item-modal .modal-body p').text(entry.get('entry'));
-        $('#journal-item-modal').modal('toggle');
-    },
-    render: function(){
+    render: function() {
         this.$el.html(this.template(this.model.toJSON()));
     }
 });
@@ -81,13 +105,48 @@ var JournalEntryView = Backbone.View.extend({
 var JournalContainerDataSource = Backbone.Model.extend({
     entries: null,
     photos: null,
-    initialize: function(){
-        this.entries = new JournalEntries();
-        this.photos = new Photos();
+    books: null,
+    initialize: function() {
+        this.entries    = new JournalEntries();
+        this.photos     = new Photos();
+        this.books      = new Books();
     },
-    reset: function(){
-        this.entries = new JournalEntries();
-        this.photos = new Photos();
+    reset: function() {
+        this.entries    = new JournalEntries();
+        this.photos     = new Photos();
+        this.books      = new Books();
+    },
+    getNext: function() {
+        var all = [];
+        if (this.entries.currentEntry() != undefined ) {
+            all.push(this.entries.currentEntry());
+        }
+        if (this.photos.currentPhoto() != undefined) {
+            all.push(this.photos.currentPhoto());
+        }
+        if (this.books.currentBook() != undefined) {
+            all.push(this.books.currentBook());
+        }
+
+        all.sort(function(a, b) {
+            return a.get('date') - b.get('date');
+        });
+
+        var next = all[0];
+
+        switch (next.get('type')) {
+            case 'book':
+                this.books.currentIndex++;
+                break;
+            case 'photo':
+                this.photos.currentIndex++;
+                break;
+            case 'entry':
+                this.entries.currentIndex++;
+                break;
+        }
+
+        return next;
     }
 });
 
@@ -101,7 +160,8 @@ var JournalContainer = Backbone.View.extend({
         console.log("journal container: initializing");
         this.model = new JournalContainerDataSource();
         console.log("journal container: initialized");
-        _.bindAll(this, '_entriesFetched', '_photosFetched', '_destroyed', '_search');
+        _.bindAll(this, '_entriesFetched', '_photosFetched', '_booksFetched',
+            '_destroyed', '_search');
         // listen to page change fired by turbo links
         // this is our chance to free up memory and remove event listeners
         $(document).on("page:change", this._destroyed);
@@ -111,16 +171,18 @@ var JournalContainer = Backbone.View.extend({
         this.fetchPage();
     },
     fetchPage: function(){
+        var params = {};
+
         if (this.model.entries.currentIndex >= this.model.entries.length && !this.model.entries.reachedMaxEntries) {
             console.log("fetching more entries. page: " + this.model.entries.currentPage);
             this.model.entries.currentIndex = 0;
-            var data = {};
-            data['page'] = this.model.entries.currentPage;
+            params = {};
+            params['page'] = this.model.entries.currentPage;
             if (this.searchQuery != null) {
-                data['search-query'] = this.searchQuery;
+                params['search-query'] = this.searchQuery;
             }
             this.model.entries.fetch({
-                data: data,
+                data: params,
                 success: this._entriesFetched
             });
             this.model.entries.currentPage++;
@@ -129,16 +191,31 @@ var JournalContainer = Backbone.View.extend({
         if (this.model.photos.currentIndex >= this.model.photos.length && !this.model.photos.reachedMaxPhotos) {
             console.log("fetching more photos. page: " + this.model.photos.currentPage);
             this.model.photos.currentIndex = 0;
-            var data = {};
-            data['page'] = this.model.photos.currentPage;
+            params = {};
+            params['page'] = this.model.photos.currentPage;
             if (this.searchQuery != null) {
-                data['search-query'] = this.searchQuery;
+                params['search-query'] = this.searchQuery;
             }
             this.model.photos.fetch({
-                data: data,
+                data: params,
                 success: this._photosFetched
             });
             this.model.photos.currentPage++;
+        }
+
+        if (this.model.books.currentIndex >= this.model.books.length && !this.model.books.reachedMaxBooks) {
+            console.log("fetching more books. page: " + this.model.books.currentPage);
+            this.model.books.currentIndex = 0;
+            params = {};
+            params['page'] = this.model.books.currentPage;
+            if (this.searchQuery != null) {
+                params['search-query'] = this.searchQuery;
+            }
+            this.model.books.fetch({
+                data:       params,
+                success:    this._booksFetched
+            });
+            this.model.books.currentPage++;
         }
     },
     _checkScroll: function(self){
@@ -157,37 +234,48 @@ var JournalContainer = Backbone.View.extend({
         return Math.max(document.body.scrollHeight, document.body.offsetHeight);
     },
     _photosFetched: function(){
-        console.log("photos: " + this.model.photos.length);
         if (this.model.photos.length == 0) {
             this.model.photos.reachedMaxPhotos = true;
         }
         this._newPageFetchSuccess();
     },
     _entriesFetched: function(){
-        console.log("entries: " + this.model.entries.length);
         if (this.model.entries.length == 0) {
             this.model.entries.reachedMaxEntries = true;
         }
         this._newPageFetchSuccess();
     },
+    _booksFetched: function() {
+        console.log("Books fetched: " + this.model.books.length);
+        if (this.model.books.length == 0) {
+            this.model.books.reachedMaxBooks = true;
+        }
+        this._newPageFetchSuccess();
+    },
     _newPageFetchSuccess: function(){
         while (this.model.entries.entriesReady() &&
-            this.model.photos.photosReady()) {
-            if (this.model.entries.reachedMaxEntries && this.model.photos.reachedMaxPhotos) {
+            this.model.photos.photosReady() &&
+            this.model.books.booksReady()) {
+            if (this.model.entries.reachedMaxEntries &&
+                this.model.photos.reachedMaxPhotos &&
+                this.model.books.reachedMaxBooks) {
                 clearInterval(this.scrollPollId);
                 break;
             }
-            var currentEntry = this.model.entries.currentEntry();
-            var currentPhoto = this.model.photos.currentPhoto();
-            if (currentEntry == undefined) {
-                this._appendPhoto(currentPhoto);
-            } else if (currentPhoto == undefined) {
-                this._appendEntry(currentEntry)
-            } else if (currentEntry.get('date') < currentPhoto.get('date')) {
-                this._appendEntry(currentEntry);
+
+            var next = this.model.getNext();
+
+            if (next.get('type') == 'entry') {
+                this._appendEntry(next);
+            } else if (next.get('type') == 'photo') {
+                this._appendPhoto(next);
+            } else if (next.get('type') == 'book') {
+                this._appendBook(next)
             } else {
-                this._appendPhoto(currentPhoto);
+                console.log("Unknown type: " + next.get('type'));
+                break;
             }
+
             if (this.initialFetch) {
                 // setup scroll poll interval
                 var self = this;
@@ -211,6 +299,11 @@ var JournalContainer = Backbone.View.extend({
 
         // advance the current index
         this.model.photos.currentIndex++;
+    },
+    _appendBook: function(book) {
+        var bookView = new BookView({model: book});
+        bookView.render();
+        this.$el.append(bookView.el);
     },
     _search: function(data){
         var searchQuery = data.searchQuery;

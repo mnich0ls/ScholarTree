@@ -38,11 +38,8 @@
     <%= javascript_include_tag "application" %>
     <%= yield :head %>
 </head>
-<body>
-<%= render 'shared/nav_bar' %>
-<div class="header">
-
-</div>
+<body class="under-navbar">
+<%= render 'shared/nav_bar_2' %>
 <% if notice %>
     <p class="alert alert-notice"><%= notice%></p>
 <% end %>

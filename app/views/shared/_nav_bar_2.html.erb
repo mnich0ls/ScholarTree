@@ -1,0 +1,47 @@
+<header class="navbar navbar-default navbar-fixed-top" role="banner">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="<%= root_path %>">ScholarTree</a>
+        </div>
+        <div class="navbar-collapse collapse" id="main-navbar-collapse">
+            <ul class="nav navbar-nav">
+                <% if user_signed_in? %>
+                    <li><%= link_to 'Edit profile', edit_user_registration_path, :class => 'navbar-link' %></li>
+                    <li class="dropdown">
+                        <%= link_to '#', :class => 'dropdown-toggle', :data => {:toggle => 'dropdown'} do %>
+                            Journal <span class="caret"></span>
+                        <% end %>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><%= link_to 'View Entries', journal_entries_path %></li>
+                            <li><%= link_to 'Photo Journal', photo_journal_show_path %></li>
+                            <li><%= link_to 'New Entry', new_journal_entry_path %></li>
+                            <li><%= link_to 'Add Photos', photos_add_path %></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <%= link_to '#', :class => 'dropdown-toggle', :data => {:toggle => 'dropdown'} do %>
+                            Goals <span class="caret"></span>
+                        <% end %>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><%= link_to 'View Goals', goals_path %></li>
+                            <li><%= link_to 'New Goal', new_goal_path %></li>
+                        </ul>
+                    </li>
+                    <li><%= link_to 'Logout', destroy_user_session_path, method: :delete, :class => 'navbar-link'  %></li>
+                <% else %>
+                    <li><%= link_to 'Sign up', new_user_registration_path, :class => 'navbar-link'  %></li>
+                    <li><%= link_to 'Login', new_user_session_path, :class => 'navbar-link'  %></li>
+                <% end %>
+            </ul><!--nav-->
+            <form id="application-search-query" class="navbar-form navbar-right" role="search" method="POST">
+                <input name="search-query" class="search-query form-control" type="text" placeholder="Search">
+            </form>
+        </div>
+    </div><!-- container -->
+</header>

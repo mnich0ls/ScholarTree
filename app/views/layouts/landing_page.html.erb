@@ -36,15 +36,13 @@
 
   <%= javascript_include_tag "application" %>
 </head>
-<body>
-<%= render 'shared/nav_bar' %>
-<!--<div class="header">-->
-
+<body class="under-navbar no-padding">
+<%= render 'shared/nav_bar_2' %>
 <!--</div>-->
-<header>
+<div class="banner">
   <h1>ScholarTree</h1>
   <p>A network dedicated to pursuing a lifetime of personal growth.</p>
-</header>
+</div>
 <% if notice %>
     <p class="alert alert-notice"><%= notice%></p>
 <% end %>

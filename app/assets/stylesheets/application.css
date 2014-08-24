@@ -11,39 +11,39 @@
  *= require_self
  *= require_tree .
  *= require dropzone/dropzone
+ *= require twitter/bootstrap
  */
-body {
+.under-navbar {
     /* prevents navbar from covering content. */
-    padding-top: 50px;
+    padding-top: 70px;
+}
+
+.no-padding {
+    padding: 0px;
 }
 
 .journal-calendar {
     min-width: 500px;
 }
 
-header {
+.banner {
     z-index: -1;
-    display: block;
-    margin-top: -20px;
-    margin-left: -20px;
-    margin-right: -20px;
     margin-bottom: 30px;
     background: -webkit-linear-gradient(left, darkgreen, green, darkgreen); /* For Safari */
     background: -o-linear-gradient(left, darkgreen, green, darkgreen); /* For Opera 11.1 to 12.0 */
     background: -moz-linear-gradient(left, darkgreen, green, darkgreen); /* For Firefox 3.6 to 15 */
     background: linear-gradient(left, darkgreen, green, darkgreen); /* Standard syntax */
-    padding-top: 60px;
-    padding-bottom: 60px;
+    padding: 60px 10px 60px 10px;
     text-align: center;
     color: black;
 }
 
-header h1 {
+.banner h1 {
     font-size: 72px;
     line-height: 1;
 }
 
-header p {
+.banner p {
     font-size: 21px;
     font-weight: 200;
     line-heigh: 30px;
@@ -66,7 +66,7 @@ textarea {
 }
 
 @media all and (max-width: 500px) {
-    header h1 {
+    .banner h1 {
         font-size: 46px;
         line-height: 1;
     }
@@ -80,4 +80,51 @@ article p {
 
 .journal-entry-header {
     border-bottom: 1px solid #eeeeee;
+}
+
+.spin {
+    -webkit-animation: spin 1s infinite linear;
+    -moz-animation: spin 1s infinite linear;
+    -o-animation: spin 1s infinite linear;
+    animation: spin 1s infinite linear;
+    -webkit-transform-origin: 50% 50%;
+    transform-origin:50% 50%;
+    -ms-transform-origin:50% 50%; /* IE 9 */
+}
+
+@-moz-keyframes spin {
+    from {
+        -moz-transform: rotate(0deg);
+    }
+    to {
+        -moz-transform: rotate(360deg);
+    }
+}
+
+@-webkit-keyframes spin {
+    from {
+        -webkit-transform: rotate(0deg);
+    }
+    to {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.glyphicon-success {
+    color: green;
+}
+
+img {
+    display: block;
+    height: auto;
+    max-width: 100%;
 }

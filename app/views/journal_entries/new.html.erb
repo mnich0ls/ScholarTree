@@ -1,35 +1,28 @@
-<%= form_for @journal_entry, url: {action: 'create'}, html: {class:'journal_entry_form'} do |f| %>
-    <fieldset>
+<%= form_for @journal_entry, url: {action: 'create'}, html: {class:'journal_entry_form', role:"form"} do |f| %>
       <legend>New Journal Entry</legend>
 
-      <div class="control-group">
-        <%= f.label :journal, class: 'control-label' %>
-        <div class="condtrols">
-          <%= f.select(:journal_id, options_from_collection_for_select(@journals, :id, :name)) %>
-        </div>
+      <div class="form-group">
+        <%= f.label :journal %>
+        <%= f.select(:journal_id, options_from_collection_for_select(@journals, :id, :name), {}, {class: 'form-control'}) %>
       </div>
-      <div class="control-group">
-        <%= f.label :description, class: 'control-label' %>
-        <div class="controls">
-          <%= f.text_field :description %>
-        </div>
+      <div class="form-group">
+        <%= f.label :description %>
+        <%= f.text_field :description, class: 'form-control' %>
       </div>
 
-      <div class="control-group">
-        <span><label style="display: inline-block;">Location </label><span class="spinner"> <i class="icon-spin icon-refresh"></i></span></span>
+      <div class="form-group">
+        <label style="display: inline-block;">Location  <span id="locating-status" class="glyphicon glyphicon-refresh spin"></span></label>
       </div>
 
-      <div class="control-group">
-        <%= f.label :entry, class: 'control-label' %>
-        <div class="controls">
-          <%= f.text_area :entry, :style => 'width: 100%; height: 400px;' %>
-        </div>
+      <div class="form-group">
+        <%= f.label :entry %>
+        <%= f.text_area :entry, :style => 'width: 100%; height: 400px;', class: 'form-control' %>
       </div>
 
       <div class="form-actions">
         <%= f.submit 'Save', :class => 'btn btn-success' %>
       </div>
-    </fieldset>
+
 <% end %>
 <script type="text/javascript">
     $(document).on('page:change', function() {
@@ -46,7 +39,7 @@
                         .val(position.coords.longitude);
                 $('.journal_entry_form').append($(lon));
                 $('.journal_entry_form').append($(lat));
-                $('.icon-spin').removeClass('icon-spin icon-refresh').attr('class', 'icon-ok');
+                $('#locating-status').removeClass('glyphicon-refresh spin').addClass('glyphicon-ok glyphicon-success');
             });
         }
     });

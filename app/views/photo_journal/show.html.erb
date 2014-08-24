@@ -1,14 +1,22 @@
 <% content_for :head do %>
 <% end %>
 <script type="text/template" id="entry-template">
-    <div class="entry-title-container">
+    <div class="entry-title-container bootstrap-column-small-gutter">
         <h5><%%= title %></h5>
+        <div class="entry-snippet-container"><%%= snippet %></div>
     </div>
-    <div class="entry-snippet-container"><%%= snippet %></div>
 </script>
 
 <script type="text/template" id="photo-template">
-    <img src="<%%= url %>" alt="<%%= description %>" height="<%%= height %>" width="<%%= width %>">
+    <div class="bootstrap-column-small-gutter">
+        <img src="<%%= url %>" alt="<%%= description %>" height="<%%= height %>" width="<%%= width %>">
+    </div>
+</script>
+
+<script type="text/template" id="book-template">
+    <div class="bootstrap-column-small-gutter">
+        <img src="<%%= url %>" alt="<%%= title %>" height="<%%= height %>" width="<%%= width %>">
+    </div>
 </script>
 
 <script type="text/javascript">
