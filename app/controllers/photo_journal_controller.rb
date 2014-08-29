@@ -75,7 +75,7 @@ class PhotoJournalController < AuthenticatedController
     render json: (JSON.generate(@photos))
   end
 
-  def books
+  def media
     search_query    = params['search-query']
     page            = params[:page]
     per_page        = 24
@@ -85,7 +85,7 @@ class PhotoJournalController < AuthenticatedController
       date = self.default_date
     end
 
-    books = Book.where('created_at >= :date AND user_id = :user_id',
+    media = Media.where('created_at >= :date AND user_id = :user_id',
                       date: date, user_id: current_user)
     .paginate(:page => page, :per_page => per_page)
     .order('created_at')
@@ -95,25 +95,25 @@ class PhotoJournalController < AuthenticatedController
 
     logger.info(modal_style)
 
-    @books = []
-    books.each do |b|
-      @books.push(
-          'id'          => b.id,
+    @media = []
+    media.each do |m|
+      @media.push(
+          'id'          => m.id,
           'type'        => 'book',
-          'url'         => b.cover_image_url_for_style(style),
-          'modalUrl'    => b.cover_image_url_for_style(modal_style),
-          'width'       => b.cover_image.width(style),
-          'height'      => b.cover_image.height(style),
-          'modalWidth'  => b.cover_image.width(modal_style),
-          'modalHeight' => b.cover_image.height(modal_style),
-          'date'        => b.created_at.to_i,
-          'dateString'  => b.created_at.strftime("%A %B %d %Y"),
-          'title'       => b.title,
-          'description' => b.description.to_s
+          'url'         => media_image_path({:id => m.id, :style => m.style_for(style)}),
+          'modalUrl'    => media_image_path({:id => m.id, :style => m.style_for(modal_style)}),
+          'width'       => m.image.width(style),
+          'height'      => m.image.height(style),
+          'modalWidth'  => m.image.width(modal_style),
+          'modalHeight' => m.image.height(modal_style),
+          'date'        => m.created_at.to_i,
+          'dateString'  => m.created_at.strftime("%A %B %d %Y"),
+          'title'       => m.title,
+          'description' => m.description != nil ? m.description.force_encoding('UTF-8') : ''
       )
     end
 
-    render json: (JSON.generate(@books))
+    render json: (JSON.generate(@media))
   end
 
   def default_date

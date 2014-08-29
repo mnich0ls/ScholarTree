@@ -83,7 +83,7 @@ var PhotoView = Backbone.View.extend({
 var Books = Backbone.Collection.extend({
     currentPage: 1,
     currentIndex: 0,
-    url: "/photo_journal/books",
+    url: "/photo_journal/media",
     reachedMaxBooks: false,
     booksReady: function() {
         return (this.currentIndex < this.length) || this.reachedMaxBooks;

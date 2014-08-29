@@ -19,6 +19,7 @@
 //= require fullcalendar.min.js
 //= require jquery.bootstrap-autohidingnavbar.js
 //= require_tree ./models
+//= require_tree ./views
 //= require_tree .
 //= require dropzone
 

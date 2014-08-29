@@ -101,7 +101,7 @@ GEM
     mime-types (1.25.1)
     minitest (4.7.5)
     multi_json (1.10.1)
-    mysql (2.9.1)
+    mysql2 (0.3.16)
     nokogiri (1.5.6)
     orm_adapter (0.5.0)
     paperclip (4.2.0)
@@ -190,7 +190,7 @@ DEPENDENCIES
   less-rails
   less-rails-bootstrap
   libv8 (= 3.16.14.3)
-  mysql
+  mysql2
   nokogiri
   paperclip
   paperclip-meta

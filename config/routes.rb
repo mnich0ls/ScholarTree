@@ -7,9 +7,9 @@ ScholarTree::Application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'home#index'
 
-  resources :journal_entries
   resources :goals
 
+  resources :journal_entries
   post 'journal_entries_calendar/events' => 'journal_entries#calendar_events_json'
   get 'journal_entries_calendar/events' => 'journal_entries#calendar_events_json'
   get 'journal_entries/:id/json'        => 'journal_entries#entry_json'
@@ -23,14 +23,13 @@ ScholarTree::Application.routes.draw do
   post  'photo_journal/show'    => 'photo_journal#show'
   get   'photo_journal/entries' => 'photo_journal#entries'
   get   'photo_journal/photos'  => 'photo_journal#photos'
-  get   'photo_journal/books'   => 'photo_journal#books'
+  get   'photo_journal/media'   => 'photo_journal#media'
 
-  get   'media_search/show'        => 'media_search#show'
-  post  'media_search/query'       => 'media_search#query'
-  post  'media_search/add_book'    => 'media_search#add_book'
-  get   'media_search/add_book'    => 'media_search#add_book'
-
-  get   'books/show/:id'   => 'books#show'
+  get   'media/add', to: 'media#add'
+  get   'media/query', to: 'media#query', as: 'media_query'
+  get   'media/:id', to: 'media#show', as: 'media'
+  get   'media/new/:id', to: 'media#new', as: 'media_new'
+  get   'media/image/:id/style/:style', to: 'media#image', as: 'media_image'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
