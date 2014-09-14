@@ -62,10 +62,10 @@ class MediaController < AuthenticatedController
 
 
 
-      if r['wrapperType'] != nil
-        result[:type] = r['wrapperType']
-      elsif r['kind'] != nil
-        result[:type] = r['kind']
+      if r['kind'] != nil
+        result[:type] = @@media_type_map[r['kind']]
+      elsif r['wrapperType'] != nil
+        result[:type] = @@media_type_map[r['wrapperType']]
       end
 
       @results.push(result)

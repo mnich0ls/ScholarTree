@@ -26,7 +26,7 @@ var MediaSearch = Backbone.View.extend({
             } else if (mediaItem.get('type') == 'track') {
                 mediaItem.set('typeClass', 'glyphicon glyphicon-music');
             } else if (mediaItem.get('type') == 'movie') {
-                mediaItem.set('typeClass', 'glyphicon glyphicon-book');
+                mediaItem.set('typeClass', 'glyphicon glyphicon-film');
             } else {
                 mediaItem.set('typeClass', '');
             }
