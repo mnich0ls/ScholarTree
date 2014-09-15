@@ -2,12 +2,15 @@ var MediaSearch = Backbone.View.extend({
     el : '#media-search-container',
     model : null,
     class : 'div',
-    events: {'submit .search-query': 'performSearch'},
+    events: {
+        'submit .search-query':     'performSearch',
+        'click  .add-media-item':   'addMediaItem'
+    },
     initialize : function() {
         this.model = new MediaItems;
         this.template = _.template($('#media-search-template').html());
         this.resultsTemplate = _.template($('#media-search-results-template').html());
-        _.bindAll(this, 'performSearch', 'renderResults');
+        _.bindAll(this, 'performSearch', 'renderResults', 'addMediaItem');
         // why doesn't this fire when the collection is first fetched?
         this.listenTo(this.model, 'change reset', this.renderResults);
     },
@@ -44,6 +47,21 @@ var MediaSearch = Backbone.View.extend({
                 type    : type
             },
             success: this.renderResults
+        });
+    },
+    addMediaItem: function(event) {
+        event.preventDefault();
+        var target      = $(event.target);
+        var container   = target.parent();
+        var identifier  = target.data('identifier');
+        var source      = target.data('source');
+        container.html('<span class="glyphicon glyphicon-ok glyphicon-success"></span>');
+        var mediaItemModel = new Backbone.Model();
+        mediaItemModel.save({identifier: identifier, source: source}, {
+            url : "/media/new",
+            error : function(){
+                container.html('<span class="glyphicon glyphicon-remove glyphicon-error"></span>');
+            }
         });
     }
 });

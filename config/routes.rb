@@ -28,7 +28,7 @@ ScholarTree::Application.routes.draw do
   get   'media/add', to: 'media#add'
   get   'media/query', to: 'media#query', as: 'media_query'
   get   'media/:id', to: 'media#show', as: 'media'
-  get   'media/new/:id', to: 'media#new', as: 'media_new'
+  post   'media/new', to: 'media#new', as: 'media_new'
   get   'media/image/:id/style/:style', to: 'media#image', as: 'media_image'
 
   # Example of regular route:

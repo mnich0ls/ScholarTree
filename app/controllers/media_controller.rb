@@ -57,7 +57,9 @@ class MediaController < AuthenticatedController
       result[:artworkUrl]   = r['artworkUrl100']
       result[:title]        = r['trackName']
       result[:thumbnailUrl] = r['artworkUrl100']
-      result[:addUrl]       = media_new_path({:id => r['trackId'].to_s})
+      result[:identifier]   = r['trackId'].to_s
+      result[:source]       = 'APPLE'
+      result[:id]           = result[:source] + result[:identifier]
       result[:owned]        = is_media_owned('APPLE', r['trackId'])
 
 
@@ -75,15 +77,16 @@ class MediaController < AuthenticatedController
   end
 
   def new
+    params.permit(:identifier, :source)
     api_params = {
-        :id     => params['id']
+        :id => params['identifier']
     }
 
-    unless is_media_owned('APPLE', params['id'])
+    unless is_media_owned(params['source'], params['id'])
       response = JSON.parse(open(MediaController::LOOKUP_URL + api_params.to_query) { |io| data = io.read })
 
       if response['results'].length == 0
-        logger.error('No media found with id: ' + params['id'])
+        logger.error('No media found with identifier: ' + params['identifier'])
       else
         media = response['results'][0]
         artwork_url  = media['artworkUrl100'].gsub(/100x100/, '600x600')
@@ -103,7 +106,7 @@ class MediaController < AuthenticatedController
     else
       medium = Media.where({:identifier => params['id'], :source => 'APPLE'}).first
     end
-    redirect_to media_path(medium)
+    render json: JSON.generate({identifier: params['identifier']})
   end
 
   def get_style(style)
