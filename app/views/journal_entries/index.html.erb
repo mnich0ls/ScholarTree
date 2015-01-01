@@ -1,0 +1,60 @@
+<div id="journal-entries-nav" class="text-center">
+    <div id="journal-entries-view-types-button-group" class="btn-group">
+        <a class="btn btn-sm btn-default disabled" href="#">
+            <i class="glyphicon glyphicon-calendar"></i>
+        </a>
+        <%= link_to photo_journal_show_path, :class => 'btn btn-sm btn-default' do %>
+            <i class="glyphicon glyphicon-th-large"></i>
+        <% end %>
+    </div>
+    <div id="journal-entries-actions">
+        <%= link_to new_journal_entry_path, :class => 'btn btn-sm btn-info' do %>
+            <i class="glyphicon glyphicon-pencil"></i>
+        <% end %>
+    </div>
+</div>
+<div id="calendar" class="journal-calendar"></div>
+<script type="text/javascript">
+    var journalEntriesPageReady = function(){
+        if ($('#clalendar')[0] == undefined) {
+            console.log("Rendering journal entry calendar");
+            $('#calendar').fullCalendar({
+                header: {
+                    left: 'prev,next, today',
+                    center: 'title',
+                    right:  'month,basicWeek,basicDay'
+                },
+                events: {
+                    url: '/journal_entries_calendar/events',
+                    type: 'post',
+                    color: 'green',
+                    backgroundColor: 'green'
+                },
+                eventAfterRender: function(event, element) {
+                    var eventLeft = $(element).position().left;
+                    var eventWidth = $(element).width();
+                    eventLeft = eventLeft + (eventWidth/2);
+                    var windowWidth = $(window).width();
+                    var placement = 'right'
+                    if (eventLeft/windowWidth > .5) {
+                        placement = 'left'
+                    }
+                    element.popover({
+                        title: event.title,
+                        container: 'body',
+                        trigger: 'hover',
+                        content: event.snippet,
+                        placement: placement
+
+                    });
+                    element.on('click', function(){element.popover('hide');});
+                }
+            });
+        }
+        else {
+            $('#calendar').fullCalendar('refetchEvents');
+        }
+        window.applicationDelegate.trigger('context-switch', { context: 'Journal Entries'});
+    };
+    $('#calendar').ready(function(){journalEntriesPageReady()});
+</script>

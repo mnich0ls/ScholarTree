@@ -5,6 +5,10 @@ application up and running.
 
 Things you may want to cover:
 
+Copy all *.dist.* files and remove "dist"
+Dist files are configuration files that a require configuration for 
+your local environment. 
+
 * Ruby version
 
 * System dependencies

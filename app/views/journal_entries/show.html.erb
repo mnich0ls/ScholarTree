@@ -1,0 +1,22 @@
+<div class="entry-nav">
+    <div class="btn-group">
+        <% if @previous_journal_entry %>
+            <a class="btn btn-sm btn-info" href="<%= journal_entry_path(@previous_journal_entry)%>"><i class="glyphicon glyphicon-chevron-left"></i></a>
+        <% end %>
+
+        <% if @next_journal_entry %>
+            <a class="btn btn-sm btn-info" href="<%= journal_entry_path(@next_journal_entry)%>"><i class="glyphicon glyphicon-chevron-right"></i></a>
+        <% end %>
+    </div>
+</div>
+<article>
+    <div class="journal-entry-header">
+        <h2><%= @journal_entry.description %></h2>
+    </div>
+    <div style="white-space: pre-wrap;">
+        <% @paragraphs.each do |p| %>
+            <p><%= p %></p>
+        <% end %>
+    </div>
+</article>
+<%= link_to 'Update', edit_journal_entry_path(@journal_entry), {:class => 'btn btn-info btn-sm'} %>

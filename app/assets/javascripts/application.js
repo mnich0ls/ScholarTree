@@ -14,4 +14,16 @@
 //= require jquery_ujs
 //= require twitter/bootstrap
 //= require turbolinks
+//= require underscore
+//= require backbone
+//= require fullcalendar.min.js
+//= require jquery.bootstrap-autohidingnavbar.js
+//= require_tree ./models
+//= require_tree ./views
 //= require_tree .
+//= require dropzone
+
+$(function(){
+    console.log("App loaded");
+    window.applicationDelegate = new ApplicationDelegate();
+});

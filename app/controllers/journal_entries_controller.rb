@@ -5,6 +5,7 @@ class JournalEntriesController < AuthenticatedController
   def index
     @user = current_user
     @journal = Journal.where('user' => current_user)[0]
+    render layout: 'full_screen'
   end
 
   def new
@@ -27,6 +28,17 @@ class JournalEntriesController < AuthenticatedController
       .where("journal_entries.created_at > ?", @journal_entry.created_at).order(created_at: :asc)[0]
     @previous_journal_entry = JournalEntry.joins(:journal).where('journals.user_id' => current_user)
       .where("journal_entries.created_at < ?", @journal_entry.created_at).order(created_at: :desc)[0]
+    @paragraphs = @journal_entry.entry.split("\r")
+    logger.info(@paragraphs)
+    new = []
+    @paragraphs.each do |p|
+      stripped = p.gsub(/[\n\r]/,'')
+      if !stripped.empty?
+        new.append(stripped.strip())
+      end
+    end
+    @paragraphs = new
+    logger.info(@paragraphs)
   end
 
   def edit
@@ -62,14 +74,27 @@ class JournalEntriesController < AuthenticatedController
         events.push(
             {
                 "start" => entry.created_at,
-                "title" => entry.description.encode('UTF-8', {:invalid => :replace, :undef => :replace, :replace => '?'}),
                 "url"   => journal_entry_url(entry),
                 "backgroundColor" => 'green',
+                "title" => entry.description.encode('UTF-8', {:invalid => :replace, :undef => :replace, :replace => '?'}),
                 "snippet" => snippet.encode('UTF-8', {:invalid => :replace, :undef => :replace, :replace => '?'})
             }
         )
     end
+    render json: (JSON.generate(events))
+  end
 
-    render text: (JSON.generate(events))
+  def entry_json
+    journal_entry = JournalEntry.find(params[:id])
+    if journal_entry.journal.user != current_user
+      logger.info("entry not owned by user")
+      raise "error"
+    end
+    @journal_entry = {
+        'id'  => journal_entry.id,
+        'title' => journal_entry.description,
+        'entry' => journal_entry.entry
+    }
+    render json: (JSON.generate(@journal_entry))
   end
 end

@@ -1,0 +1,11 @@
+<h2>Goals</h2>
+<table>
+  <thead><td style="width: 30%">Name</td><td style="width: 100%">Priority</td></thead>
+  <tr><td></td><td><span style="float: left; font-size: 12px;">Low</span><span style="float: right; font-size: 12px;">High</span></td></tr>
+<% @goals.each do |goal| %>
+      <tr>
+        <td><div><a href="<%= edit_goal_path(goal.id) %>"><%= goal.title %></a></div></td>
+        <td><div class="graph-bar" style="width: <%= goal.priority * 100 %>%; background: blue; height: 8px;"></div></td>
+      </tr>
+<% end %>
+</table>

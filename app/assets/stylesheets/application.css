@@ -10,42 +10,60 @@
  *
  *= require_self
  *= require_tree .
+ *= require dropzone/dropzone
+ *= require twitter/bootstrap
  */
-body {
+.under-navbar {
     /* prevents navbar from covering content. */
-    padding-top: 40px;
+    padding-top: 70px;
 }
 
-header {
+.under-double-navbar {
+    /* prevents navbar from covering content. */
+    padding-top: 100px;
+}
+
+.no-padding {
+    padding: 0px;
+}
+
+.journal-calendar {
+    min-width: 500px;
+}
+
+.banner {
     z-index: -1;
-    display: block;
-    margin-top: -20px;
-    margin-left: -20px;
-    margin-right: -20px;
     margin-bottom: 30px;
     background: -webkit-linear-gradient(left, darkgreen, green, darkgreen); /* For Safari */
     background: -o-linear-gradient(left, darkgreen, green, darkgreen); /* For Opera 11.1 to 12.0 */
     background: -moz-linear-gradient(left, darkgreen, green, darkgreen); /* For Firefox 3.6 to 15 */
     background: linear-gradient(left, darkgreen, green, darkgreen); /* Standard syntax */
-    padding-top: 60px;
-    padding-bottom: 60px;
+    padding: 60px 10px 60px 10px;
     text-align: center;
     color: black;
 }
 
-header h1 {
+.banner h1 {
     font-size: 72px;
     line-height: 1;
 }
 
-header p {
+.banner p {
     font-size: 21px;
     font-weight: 200;
     line-heigh: 30px;
 }
-.content-container {
+.fixed-width-content-container {
     max-width: 700px;
     margin: 0 auto;
+}
+
+.full-screen-content-container {
+    margin: 0 auto;
+}
+
+textarea {
+    width: 100%;
 }
 
 .footer {
@@ -53,8 +71,104 @@ header p {
 }
 
 @media all and (max-width: 500px) {
-    header h1 {
+    .banner h1 {
         font-size: 46px;
         line-height: 1;
     }
+}
+
+article p {
+    font-size: 12px;
+    line-height: 18px;
+    margin: 0 0 -20px;
+}
+
+.journal-entry-header {
+    border-bottom: 1px solid #eeeeee;
+}
+
+.spin {
+    -webkit-animation: spin 1s infinite linear;
+    -moz-animation: spin 1s infinite linear;
+    -o-animation: spin 1s infinite linear;
+    animation: spin 1s infinite linear;
+    -webkit-transform-origin: 50% 50%;
+    transform-origin:50% 50%;
+    -ms-transform-origin:50% 50%; /* IE 9 */
+}
+
+@-moz-keyframes spin {
+    from {
+        -moz-transform: rotate(0deg);
+    }
+    to {
+        -moz-transform: rotate(360deg);
+    }
+}
+
+@-webkit-keyframes spin {
+    from {
+        -webkit-transform: rotate(0deg);
+    }
+    to {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.glyphicon-success {
+    color: green;
+}
+
+.glyphicon-error {
+    color: red;
+}
+
+img {
+    display: block;
+    height: auto;
+    max-width: 100%;
+}
+
+.affix {
+    top: 50px;
+    width:100%;
+}
+
+.context-navbar {
+    margin-top: 50px; /* push below main navbar */
+    width: 100% !important;
+    min-height: 30px !important; /* make smaller. default is 50px */
+    border-radius: 0px !important;
+    position: fixed !important; /* prevent scrolling with page content */
+    z-index: 1000; /* ensure on top of content */
+}
+
+.context-navbar-context-title {
+    max-height: 30px !important;
+    padding: 10px 15px !important;
+    font-size: 15px !important;
+    min-width: 150px;
+}
+
+.page-search-input {
+    max-height: 25px !important;
+}
+
+/* Move this to it's own style sheet */
+
+#journal-entries-nav {
+    margin-bottom: 5px;
+}
+
+#journal-entries-actions {
+    float: right;
 }

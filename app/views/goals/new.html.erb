@@ -1,0 +1,112 @@
+<%= form_for @goal, url: {action: 'create'}, html: {class:'goal_form'} do |f| %>
+    <fieldset>
+      <legend>New Goal</legend>
+
+      <div class="control-group">
+        <%= f.label 'Name', class: 'control-label' %>
+        <div class="controls">
+          <%= f.text_field :title %>
+      </div>
+
+      <div class="control-group">
+        <%= f.label 'Why have you set this goal for yourself?' %>
+        <div class="controls">
+          <%= f.text_area :belief_statement, :style => 'height: 100px;' %>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <%= f.label 'Timeline', class: 'control-label' %>
+        <div class="controls">
+          <%= f.select(:timeline_category, options_for_select(@goal_timeline_categories.collect {|t| [t['title'], t['value']]})) %>
+        </div>
+      </div>
+
+      <!-- Track location for everything? -->
+      <!--<div class="control-group">-->
+        <!--<span><label style="display: inline-block;">Location </label><span class="spinner"> <i class="icon-spin icon-refresh"></i></span></span>-->
+      <!--</div>-->
+
+    <div id="goal-timeline-date-input" style="display: none;">
+      <div class="control-group">
+        <%= f.label 'Target Date', class: 'control-label' %>
+        <div class="controls">
+          <%= f.date_select :timeline_target_completion_date %>
+        </div>
+      </div>
+    </div>
+
+      </div>
+
+      <%= f.fields_for :goal_resources do |resource_form| %>
+          <div class="control-group">
+            <%= resource_form.label 'Requires', class: 'control-label' %>
+            <div class="controls">
+              <%= resource_form.select(:name, options_for_select(@goal_resources.collect {|t| [t['title'], t['value']]})) %>
+            </div>
+          </div>
+          <div id="goal-resource-freeform-name-input" class="control-group" style="display: none;">
+            <%= resource_form.label 'What do you believe this goal requires?' %>
+            <div class="controls">
+              <%= resource_form.text_field :freeform_name %>
+            </div>
+          </div>
+          <div class="control-group">
+            <%= resource_form.label 'Do you feel you have what you need?' %>
+            <div class="controls">
+              <!-- wrapping the labels and range field in a span allows the label
+              div to have the same width as the range field -->
+              <span style="display: inline-block;">
+                <div>
+                  <span style="float: left; font-size: 12px;">Not at all</span>
+                  <span style="float: right; font-size: 12px;">Absolutely</span>
+                </div>
+                <%= resource_form.range_field :allocation, :min => 0, :max => 1, :step => '.01' %>
+              </span>
+            </div>
+          </div>
+      <% end %>
+
+      <%= f.fields_for :goal_priorities do |priority_form| %>
+          <div class="control-group">
+            <%= priority_form.label 'Priority', class: 'control-label' %>
+            <div class="controls">
+              <!-- wrapping the labels and range field in a span allows the label
+              div to have the same width as the range field -->
+              <span style="display: inline-block;">
+                <div>
+                  <span style="float: left; font-size: 12px">Low</span>
+                  <span style="float: right; font-size: 12px">High</span>
+                </div>
+                <%= priority_form.range_field :priority, :min => 0, :max => 1, :step => '.01' %>
+              </span>
+            </div>
+          </div>
+      <% end %>
+
+      <div class="form-actions">
+        <%= f.submit 'Save', :class => 'btn btn-success' %>
+      </div>
+    </fieldset>
+<% end %>
+
+<script type="text/javascript">
+  $('#goal_resource').on('change', function(event){
+
+     if ('other' == $(event.currentTarget).val()) {
+         $('#goal-timeline-date-input').show('slow');
+     }
+     else {
+         $('#goal-timeline-date-input').hide('slow');
+     }
+  });
+  $('#goal_goal_resources_attributes_0_name').on('change', function(event){
+
+      if ('other' == $(event.currentTarget).val()) {
+          $('#goal-resource-freeform-name-input').show('slow');
+      }
+      else {
+          $('#goal-resource-freeform-name-input').hide('slow');
+      }
+  });
+</script>

@@ -1,27 +1,50 @@
 source 'https://rubygems.org'
 
+# HTML parser
+gem 'nokogiri'
+
+# Natural language date parser
+gem 'chronic'
+
+# Used to extract exif data from JPGs
+gem 'exifr'
+
+# JavaScript frameworks
+gem 'backbone-on-rails'
+
+# JavaScript utilities
+gem 'underscore-rails'
+
+# Pagination
+gem 'will_paginate'
+
+#
+# JavaScript Modules
+#
+# Dropzone for drag and drop file uploads
+gem 'dropzonejs-rails'
+
 gem 'libv8', '3.16.14.3'
 
+# Stylesheet language
+gem 'less-rails'
+gem 'therubyracer'
+
 # Twitter Bootstrap
-gem "therubyracer"
-gem "less-rails"
-gem "twitter-bootstrap-rails"
+gem 'less-rails-bootstrap'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.0.2'
 
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
-gem 'mysql'
+gem 'mysql2'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.0'
 
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
-
-# Use CoffeeScript for .js.coffee assets and views
-gem 'coffee-rails', '~> 4.0.0'
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
@@ -54,3 +77,15 @@ end
 
 # Authentication
 gem 'devise'
+
+# Template framework
+gem 'haml-rails'
+
+# Files/attachments
+gem 'paperclip'
+
+# Extract dimensions from paperclip images
+gem 'paperclip-meta'
+
+# Easily define which attributes of a model are accessible to a controller
+gem 'protected_attributes'

@@ -1,0 +1,73 @@
+<script type="text/template" id="media-search-template">
+    <div class="search-bar search-query">
+        <form action="#" role="form">
+            <div class="form-group">
+                <span><input type="text" class="search-query form-control"></span>
+
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input name="type" value="all" type="radio" checked="true"> All
+                </label>
+                <label>
+                    <input name="type" value="ebook" type="radio"> Book
+                </label>
+                <label>
+                    <input name="type" value="audiobook" type="radio"> Audio Book
+                </label>
+                <label>
+                    <input name="type" value="software" type="radio"> App
+                </label>
+                <label>
+                    <input name ="type" value="movie" type="radio"> Movie
+                </label>
+                <label>
+                    <input name="type" value="podcast" type="radio"> Podcast
+                </label>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Search" class="btn btn-success btn-sm">
+            </div>
+        </form>
+    </div>
+    <div class="results">
+    </div>
+</script>
+
+<script type="text/template" id="media-search-results-template">
+    <table class="results-list table table-hover">
+        <thead>
+        <tr>
+            <th></th>
+            <th></th>
+            <th>Title</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+            <%% _.each(mediaItems, function(mediaItem){ %>
+                <tr>
+                    <td><img src="<%%= mediaItem.artworkUrl %>"/></td>
+                    <td><span class="<%%= mediaItem.typeClass %>"></span></td>
+                    <td><%%= mediaItem.title %></td>
+                    <td>
+                        <%% if (mediaItem.owned) { %>
+                            <span class="glyphicon glyphicon-ok glyphicon-success"></span>
+                        <%% } else { %>
+                            <span class="btn btn-success btn-xs add-media-item" data-identifier="<%%= mediaItem.identifier %>" data-source="<%%= mediaItem.source %>">Add</span>
+                        <%% } %>
+                    </td>
+                </tr>
+            <%% }); %>
+        </tbody>
+    </table>
+</script>
+
+<script type="text/javascript">
+    $('#media-search-container').ready(function(){
+        var mediaSearch = new MediaSearch();
+        mediaSearch.render();
+    });
+</script>
+
+<div id="media-search-container"></div>
