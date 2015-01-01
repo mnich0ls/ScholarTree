@@ -89,8 +89,7 @@ class GoalsController < AuthenticatedController
     params.require(:goal).permit(:title, :timeline_category, :timeline_target_completion_date,
                                  :belief_statement,
                                  goal_priorities_attributes: [:id, :priority],
-                                 goal_resources_attributes: [:id, :name, :allocation, :freeform_name]
-    )
+                                 goal_resources_attributes: [:id, :name, :allocation, :freeform_name])
   end
 
   private

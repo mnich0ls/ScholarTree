@@ -18,11 +18,26 @@
                             Journal <span class="caret"></span>
                         <% end %>
                         <ul class="dropdown-menu" role="menu">
-                            <li><%= link_to 'View Entries', journal_entries_path %></li>
-                            <li><%= link_to 'Photo Journal', photo_journal_show_path %></li>
-                            <li><%= link_to 'New Entry', new_journal_entry_path %></li>
-                            <li><%= link_to 'Add Photos', photos_add_path %></li>
-                            <li><%= link_to 'Add Media', media_add_path %></li>
+                            <li>
+                                <%= link_to journal_entries_path do %>
+                                    <i class="glyphicon glyphicon-th-large"></i> View Entries
+                                <% end %>
+                            </li>
+                            <li>
+                                <%= link_to new_journal_entry_path do %>
+                                    <i class="glyphicon glyphicon-pencil"></i> New Entry
+                                <% end %>
+                            </li>
+                            <li>
+                                <%= link_to photos_add_path do %>
+                                    <i class="glyphicon glyphicon-picture"></i> Add Photos
+                                <% end %>
+                            </li>
+                            <li>
+                                <%= link_to media_add_path do %>
+                                    <i class="glyphicon glyphicon-music"></i> Add Media
+                                <% end %>
+                            </li>
                         </ul>
                     </li>
                     <li class="dropdown">

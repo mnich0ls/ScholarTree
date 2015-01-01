@@ -39,8 +39,7 @@
   </head>
   <body>
   <%= render 'shared/nav_bar_2' %>
-  <%= render 'shared/nav_bar_2_context_nav' %>
-      <div class="under-double-navbar">
+      <div class="under-navbar">
         <% if notice %>
             <p class="alert alert-notice"><%= notice%></p>
         <% end %>
@@ -50,8 +49,8 @@
         <div class="container-fluid fixed-width-content-container">
         <%= yield %>
         </div>
-        <div class="footer" />
-        <%= render 'shared/footer' %>
+        <div class="footer">
+            <%= render 'shared/footer' %>
         </div>
       </div>
   </body>

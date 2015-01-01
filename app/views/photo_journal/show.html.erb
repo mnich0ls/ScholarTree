@@ -23,6 +23,23 @@
         window.journalContainer.render();
     });
 </script>
+
+<div id="journal-entries-nav" class="text-center">
+    <div id="journal-entries-view-types-button-group" class="btn-group">
+        <%= link_to journal_entries_path, :class => 'btn btn-sm btn-default' do %>
+            <i class="glyphicon glyphicon-calendar"></i>
+        <% end %>
+        <a class="btn btn-sm btn-default disabled" href="#">
+            <i class="glyphicon glyphicon-th-large"></i>
+        </a>
+    </div>
+    <div id="journal-entries-actions">
+        <%= link_to new_journal_entry_path, :class => 'btn btn-sm btn-info' do %>
+            <i class="glyphicon glyphicon-pencil"></i>
+        <% end %>
+    </div>
+</div>
+
 <div id="journal-container" class="search-context" search-url="/photo_journal/show"></div>
 
 <div id="journal-item-modal" class="modal fade">

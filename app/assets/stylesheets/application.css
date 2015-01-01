@@ -162,3 +162,13 @@ img {
 .page-search-input {
     max-height: 25px !important;
 }
+
+/* Move this to it's own style sheet */
+
+#journal-entries-nav {
+    margin-bottom: 5px;
+}
+
+#journal-entries-actions {
+    float: right;
+}
