@@ -179,7 +179,7 @@ var JournalContainer = Backbone.View.extend({
         // listen to page change fired by turbo links
         // this is our chance to free up memory and remove event listeners
         $(document).on("page:change", this._destroyed);
-        window.applicationDelegate.registerEventHandler('context-search', this._search, 'Photo Journal');
+        window.applicationDelegate.registerEventHandler('application-search', this._search, 'Photo Journal');
         window.applicationDelegate.trigger('context-switch', { context: "Photo Journal" });
         console.log("journal container: initialized");
     },
@@ -342,7 +342,7 @@ var JournalContainer = Backbone.View.extend({
         if (this.scrollPollId != undefined) {
             clearInterval(this.scrollPollId);
             console.log("Photo Journal removed scroll poll interval");
-            window.applicationDelegate.removeEventHandler('context-search', this._search, 'Photo Journal');
+            window.applicationDelegate.removeEventHandler('application-search', this._search, 'Photo Journal');
             $(document).off("page:change", this._destroyed);
         }
     }
